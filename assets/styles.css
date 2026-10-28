@@ -8,8 +8,8 @@
   --surface: #FFFFFF;
   --alt: #E6EAED;
   --ink: #12171B;
-  --ink-2: #3E484F;
-  --ink-3: #525E67;
+  --ink-2: #283035;
+  --ink-3: #343D43;
   --line: #D3DADF;
   --accent: #93571A;
   --accent-ink: #FFFFFF;
@@ -21,7 +21,7 @@
   --fil-shade: #1B2328;
   --inv-bg: #12171B;
   --inv-fg: #EEF1F3;
-  --inv-fg-2: #A9B3BB;
+  --inv-fg-2: #C3CBD1;
   --head-bg: rgba(238, 241, 243, 0.88);
   --foot-mark: #D3DADF;
   --crit: #B0382B;
@@ -41,8 +41,8 @@
     --surface: #161B1F;
     --alt: #13181C;
     --ink: #E7ECEF;
-    --ink-2: #B7C0C7;
-    --ink-3: #9AA5AE;
+    --ink-2: #D0D7DB;
+    --ink-3: #BCC5CB;
     --line: #262E35;
     --accent: #D89D4C;
     --accent-ink: #1B1206;
@@ -54,7 +54,7 @@
     --fil-shade: #2E373F;
     --inv-bg: #E7ECEF;
     --inv-fg: #0F1316;
-    --inv-fg-2: #3E484F;
+    --inv-fg-2: #283035;
     --head-bg: rgba(15, 19, 22, 0.86);
     --foot-mark: #1E252B;
     --crit: #E7695A;
@@ -67,8 +67,8 @@
   --surface: #161B1F;
   --alt: #13181C;
   --ink: #E7ECEF;
-  --ink-2: #B7C0C7;
-  --ink-3: #9AA5AE;
+  --ink-2: #D0D7DB;
+  --ink-3: #BCC5CB;
   --line: #262E35;
   --accent: #D89D4C;
   --accent-ink: #1B1206;
@@ -80,7 +80,7 @@
   --fil-shade: #2E373F;
   --inv-bg: #E7ECEF;
   --inv-fg: #0F1316;
-  --inv-fg-2: #3E484F;
+  --inv-fg-2: #283035;
   --head-bg: rgba(15, 19, 22, 0.86);
   --foot-mark: #1E252B;
   --crit: #E7695A;
@@ -167,7 +167,7 @@ h3 {
   font-size: 22px; line-height: 1.15; letter-spacing: -0.005em;
 }
 .eyebrow {
-  font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink-3);
+  font-family: var(--f-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; color: var(--ink-3);
   display: flex; align-items: center; gap: 10px;
 }
 .eyebrow::before { content: ""; width: 18px; height: 2px; background: var(--accent); flex: 0 0 auto; }
@@ -346,7 +346,7 @@ h3 {
 }
 .form-card figcaption { display: grid; gap: 2px; }
 .form-card b { font-family: var(--f-display); font-stretch: 112%; font-weight: 700; font-size: 18px; }
-.form-card .mono { font-size: 12.5px; color: var(--ink-3); }
+.form-card .mono { font-size: 12.5px; font-weight: 500; color: var(--ink-3); }
 @media (max-width: 980px) { .forms { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (hover: none) { .hint { display: none; } .form-card canvas { cursor: default; } }
 
