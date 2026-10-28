@@ -31,6 +31,8 @@
     C.plate = v("--plate");
     C.grid = v("--plate-grid");
     C.bins = [];
+    // gli stessi colori per il vaso in WebGL (valori da 0 a 1)
+    C.gl = { lit: rgb01(C.lit), shade: rgb01(C.shade), accent: rgb01(hexToRgb(C.accent)), plate: rgb01(hexToRgb(C.plate)), grid: rgb01(hexToRgb(C.grid)) };
     for (var b = 0; b < BINS; b++) {
       var t = b / (BINS - 1);
       C.bins.push("rgb(" + [0, 1, 2].map(function (k) {
@@ -39,6 +41,7 @@
     }
   }
   var BINS = 8;
+  function rgb01(c) { return [c[0] / 255, c[1] / 255, c[2] / 255]; }
 
   /* ---------- utilità ---------- */
   function clamp(x, a, b) { return Math.min(b, Math.max(a, x)); }
@@ -222,12 +225,257 @@
     }
   }
 
+  /* ---------- apertura in 3D: il vaso vero, in WebGL ----------
+     Niente librerie: una superficie di rivoluzione con la stessa forma e la stessa texture "trama"
+     del disegno 2D, due file di vertici per strato (solco e cresta) così si vedono gli strati.
+     Il vaso ruota piano e segue il mouse; su telefono si gira trascinando col dito.
+     Se WebGL non c'è, resta il disegno 2D. Con il movimento ridotto: vaso intero, fermo. */
+  var VS = [
+    "attribute vec3 aPos; attribute vec3 aNor;",
+    "uniform mat4 uModel; uniform mat4 uViewProj;",
+    "varying vec3 vN; varying vec3 vP;",
+    "void main() {",
+    "  vP = aPos; vN = mat3(uModel) * aNor;",
+    "  gl_Position = uViewProj * uModel * vec4(aPos, 1.0);",
+    "}"
+  ].join("\n");
+  var FS = [
+    "precision mediump float;",
+    "uniform vec3 uLit; uniform vec3 uShade; uniform vec3 uAccent; uniform vec3 uPlate; uniform vec3 uGrid;",
+    "uniform vec3 uLight; uniform float uMode; uniform float uPrintY; uniform float uLayerH; uniform float uFrac;",
+    "varying vec3 vN; varying vec3 vP;",
+    "void main() {",
+    "  if (uMode > 0.5) {",                                  // piatto di stampa con la griglia
+    "    vec2 g = abs(fract(vP.xz * 6.0 + 0.5) - 0.5) / fwidthSafe(vP.xz * 6.0);",
+    "    float line = 1.0 - clamp(min(g.x, g.y), 0.0, 1.0);",
+    "    gl_FragColor = vec4(mix(uPlate, uGrid, line * 0.9), 1.0);",
+    "    return;",
+    "  }",
+    "  if (vP.y > uPrintY + uLayerH) discard;",               // sopra lo strato in stampa: non ancora stampato
+    "  vec3 n = normalize(vN); float inside = 1.0;",
+    "  if (!gl_FrontFacing) { n = -n; inside = 0.55; }",
+    "  float k = 0.12 + 0.88 * max(0.0, dot(n, uLight));",
+    "  vec3 col = mix(uShade, uLit, k * inside);",
+    "  vec3 v = vec3(0.0, 0.35, 0.94);",                       // verso chi guarda
+    "  float spec = pow(max(dot(n, normalize(uLight + v)), 0.0), 28.0) * 0.35 * inside;",
+    "  float rim = pow(1.0 - max(dot(n, v), 0.0), 3.0) * 0.18 * inside;",
+    "  col = mix(col, vec3(1.0), spec) + (uLit - col) * rim;",
+    "  if (vP.y > uPrintY) {",                                // strato in stampa: bronzo, avanza col giro dell'ugello
+    "    float a = fract(atan(vP.z, vP.x) / 6.2831853 - 0.25);",
+    "    if (a > uFrac) discard;",
+    "    col = uAccent;",
+    "  }",
+    "  gl_FragColor = vec4(col, 1.0);",
+    "}"
+  ].join("\n");
+
+  function makeHero3D(old) {
+    var canvas = document.createElement("canvas");
+    var gl = null;
+    try { gl = canvas.getContext("webgl", { antialias: true, alpha: true }); } catch (e) { gl = null; }
+    if (!gl) return null;
+    var deriv = gl.getExtension("OES_standard_derivatives");
+    var fs = (deriv ? "#extension GL_OES_standard_derivatives : enable\n#define fwidthSafe(x) fwidth(x)\n"
+                    : "#define fwidthSafe(x) vec2(0.02)\n") + FS;
+    function shader(type, src) {
+      var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+      return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+    }
+    var vs = shader(gl.VERTEX_SHADER, VS), fsh = shader(gl.FRAGMENT_SHADER, fs);
+    if (!vs || !fsh) return null;
+    var prog = gl.createProgram();
+    gl.attachShader(prog, vs); gl.attachShader(prog, fsh); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
+
+    /* geometria del vaso: altezza 1, raggio come nel disegno 2D (0,4 dell'altezza) */
+    var S = STYLES.trama, N = S.layers;
+    var small = Math.min(window.innerWidth, window.innerHeight) < 600;
+    var M = small ? 96 : 144, ROWS = N * 2 + 1, COLS = M + 1;
+    var pos = new Float32Array(ROWS * COLS * 3), nor = new Float32Array(ROWS * COLS * 3);
+    var r, row, j;
+    for (row = 0; row < ROWS; row++) {
+      var y = row / (ROWS - 1), layer = Math.min(N - 1, row >> 1), groove = (row & 1) === 0;
+      for (j = 0; j < COLS; j++) {
+        var th = (j % M) / M * TAU;
+        r = 0.4 * (profile(S.ctrl, y) + S.tex(th, y, layer)) * (groove ? 0.984 : 1);
+        var o = (row * COLS + j) * 3;
+        pos[o] = r * Math.cos(th); pos[o + 1] = y; pos[o + 2] = r * Math.sin(th);
+      }
+    }
+    // normali dalle differenze tra vicini (lungo il giro e lungo l'altezza)
+    for (row = 0; row < ROWS; row++) {
+      var up = Math.min(ROWS - 1, row + 1), dn = Math.max(0, row - 1);
+      for (j = 0; j < COLS; j++) {
+        var jn = (j % M + 1) % M, jp = (j % M + M - 1) % M;
+        var a = (row * COLS + jn) * 3, b = (row * COLS + jp) * 3, c = (up * COLS + j) * 3, d = (dn * COLS + j) * 3;
+        var tx = pos[a] - pos[b], ty = pos[a + 1] - pos[b + 1], tz = pos[a + 2] - pos[b + 2];
+        var vx = pos[c] - pos[d], vy = pos[c + 1] - pos[d + 1], vz = pos[c + 2] - pos[d + 2];
+        var nx = vy * tz - vz * ty, ny = vz * tx - vx * tz, nz = vx * ty - vy * tx;
+        var l = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1, q = (row * COLS + j) * 3;
+        nor[q] = nx / l; nor[q + 1] = ny / l; nor[q + 2] = nz / l;
+      }
+    }
+    var idx = new Uint16Array((ROWS - 1) * M * 6), n = 0;
+    for (row = 0; row < ROWS - 1; row++) for (j = 0; j < M; j++) {
+      var i0 = row * COLS + j, i1 = i0 + 1, i2 = i0 + COLS, i3 = i2 + 1;
+      idx[n++] = i0; idx[n++] = i2; idx[n++] = i1; idx[n++] = i1; idx[n++] = i2; idx[n++] = i3;
+    }
+    // piatto: un disco sotto il vaso
+    var PS = 72, ppos = new Float32Array((PS + 2) * 3), pnor = new Float32Array((PS + 2) * 3);
+    for (j = 0; j <= PS; j++) {
+      var pa = j / PS * TAU;
+      ppos[(j + 1) * 3] = 0.74 * Math.cos(pa); ppos[(j + 1) * 3 + 1] = -0.004; ppos[(j + 1) * 3 + 2] = 0.74 * Math.sin(pa);
+    }
+    ppos[1] = -0.004;
+    for (j = 0; j < PS + 2; j++) pnor[j * 3 + 1] = 1;
+
+    function buf(data, target) { var bo = gl.createBuffer(); gl.bindBuffer(target || gl.ARRAY_BUFFER, bo); gl.bufferData(target || gl.ARRAY_BUFFER, data, gl.STATIC_DRAW); return bo; }
+    var vPos = buf(pos), vNor = buf(nor), vIdx = buf(idx, gl.ELEMENT_ARRAY_BUFFER), pPos = buf(ppos), pNor = buf(pnor);
+    var aPos = gl.getAttribLocation(prog, "aPos"), aNor = gl.getAttribLocation(prog, "aNor");
+    var U = {};
+    ["uModel", "uViewProj", "uLit", "uShade", "uAccent", "uPlate", "uGrid", "uLight", "uMode", "uPrintY", "uLayerH", "uFrac"]
+      .forEach(function (u) { U[u] = gl.getUniformLocation(prog, u); });
+
+    /* matrici 4x4, in colonna come vuole WebGL */
+    function mul(a, b) {
+      var o = new Float32Array(16);
+      for (var c = 0; c < 4; c++) for (var r2 = 0; r2 < 4; r2++) {
+        o[c * 4 + r2] = a[r2] * b[c * 4] + a[4 + r2] * b[c * 4 + 1] + a[8 + r2] * b[c * 4 + 2] + a[12 + r2] * b[c * 4 + 3];
+      }
+      return o;
+    }
+    function persp(fov, asp, nr, fr) {
+      var f = 1 / Math.tan(fov / 2), m = new Float32Array(16);
+      m[0] = f / asp; m[5] = f; m[10] = (fr + nr) / (nr - fr); m[11] = -1; m[14] = 2 * fr * nr / (nr - fr);
+      return m;
+    }
+    function rotY(a) { var c = Math.cos(a), s = Math.sin(a); return new Float32Array([c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1]); }
+    function rotX(a) { var c = Math.cos(a), s = Math.sin(a); return new Float32Array([1, 0, 0, 0, 0, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1]); }
+    function move(x, y, z) { return new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]); }
+
+    /* stato del movimento */
+    var st = { yaw: -0.6, off: 0, offT: 0, tilt: 0, tiltT: 0, vel: 0, drag: null, last: 0, raf: 0, visible: true };
+
+    function render(now) {
+      var rect = canvas.getBoundingClientRect();
+      var dpr = Math.min(small ? 1.5 : 2, window.devicePixelRatio || 1);
+      var w = Math.max(1, Math.round(rect.width * dpr)), h = Math.max(1, Math.round(rect.height * dpr));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      gl.viewport(0, 0, w, h);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.enable(gl.DEPTH_TEST);
+      gl.useProgram(prog);
+
+      var asp = w / h;
+      // inquadratura: il vaso (alto 1) occupa circa due terzi della scena, leggermente dall'alto
+      var el = 0.34, dist = asp < 0.95 ? 4.1 : 3.7;
+      var view = mul(move(0, -0.02, -dist), mul(rotX(el), move(0, -0.45, 0)));
+      var vp = mul(persp(0.52, asp, 0.1, 20), view);
+      var model = mul(rotX(st.tilt), rotY(st.yaw + st.off));
+      gl.uniformMatrix4fv(U.uViewProj, false, vp);
+      gl.uniformMatrix4fv(U.uModel, false, model);
+      gl.uniform3fv(U.uLit, C.gl.lit); gl.uniform3fv(U.uShade, C.gl.shade); gl.uniform3fv(U.uAccent, C.gl.accent);
+      gl.uniform3fv(U.uPlate, C.gl.plate); gl.uniform3fv(U.uGrid, C.gl.grid);
+      // luce da davanti a sinistra e dall'alto, ferma: gli strati brillano mentre il vaso gira
+      gl.uniform3fv(U.uLight, [-0.55, 0.45, 0.70]);
+
+      var p = heroProgress, total = p * N, done = Math.floor(total);
+      var layerH = 1 / N;
+      gl.uniform1f(U.uLayerH, layerH);
+      gl.uniform1f(U.uPrintY, p >= 1 ? 2 : done * layerH);
+      gl.uniform1f(U.uFrac, p >= 1 ? 1 : total - done);
+
+      // piatto
+      gl.uniform1f(U.uMode, 1);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pPos); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pNor); gl.enableVertexAttribArray(aNor); gl.vertexAttribPointer(aNor, 3, gl.FLOAT, false, 0, 0);
+      gl.drawArrays(gl.TRIANGLE_FAN, 0, PS + 2);
+      // vaso
+      gl.uniform1f(U.uMode, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, vPos); gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, vNor); gl.vertexAttribPointer(aNor, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vIdx);
+      gl.drawElements(gl.TRIANGLES, idx.length, gl.UNSIGNED_SHORT, 0);
+    }
+
+    function still() { return reduceMq.matches; }
+    function frame(now) {
+      st.raf = 0;
+      var dt = st.last ? Math.min(0.05, (now - st.last) / 1000) : 0;
+      st.last = now;
+      if (!still()) {
+        if (!st.drag) { st.yaw += dt * 0.22 + st.vel * dt; st.vel *= Math.pow(0.04, dt); }
+        st.off += (st.offT - st.off) * Math.min(1, dt * 4);
+        st.tilt += (st.tiltT - st.tilt) * Math.min(1, dt * 4);
+      }
+      render(now);
+      if (st.visible && !still()) st.raf = requestAnimationFrame(frame);
+      else st.last = 0;
+    }
+    function kick() { if (!st.raf) st.raf = requestAnimationFrame(frame); }
+
+    // mouse: il vaso guarda verso il puntatore (poco: al massimo un terzo di giro e un filo d'inclinazione)
+    if (finePointer) {
+      window.addEventListener("pointermove", function (e) {
+        if (still() || !st.visible || e.pointerType !== "mouse") return;
+        var rc = canvas.getBoundingClientRect();
+        st.offT = clamp((e.clientX - (rc.left + rc.width / 2)) / (rc.width * 1.2), -1, 1) * 0.9;
+        st.tiltT = clamp((e.clientY - (rc.top + rc.height / 2)) / (rc.height * 1.2), -1, 1) * 0.16;
+      }, { passive: true });
+    }
+    // dito (e mouse) sul vaso: trascinando lo si gira, poi continua per inerzia
+    canvas.addEventListener("pointerdown", function (e) {
+      if (still()) return;
+      st.drag = { x: e.clientX, t: performance.now() };
+      st.vel = 0;
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* niente */ }
+    });
+    canvas.addEventListener("pointermove", function (e) {
+      if (!st.drag) return;
+      var now = performance.now(), dx = e.clientX - st.drag.x, dtm = Math.max(1, now - st.drag.t);
+      var da = dx / Math.max(160, canvas.clientWidth) * Math.PI;
+      st.yaw += da; st.vel = da / (dtm / 1000);
+      st.drag.x = e.clientX; st.drag.t = now;
+      kick();
+    });
+    function endDrag() { st.drag = null; st.vel = clamp(st.vel, -6, 6); }
+    canvas.addEventListener("pointerup", endDrag);
+    canvas.addEventListener("pointercancel", endDrag);
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) {
+        st.visible = en[0].isIntersecting;
+        if (st.visible) kick();
+      }).observe(canvas);
+    }
+
+    // il nuovo canvas prende il posto di quello 2D, con la stessa descrizione
+    canvas.id = old.id;
+    canvas.className = "is-3d";
+    canvas.setAttribute("role", "img");
+    canvas.setAttribute("aria-label", "Un vaso a strati che si stampa sul piatto della stampante e gira su se stesso");
+    old.parentNode.replaceChild(canvas, old);
+
+    canvas.addEventListener("webglcontextlost", function (e) {
+      // la scheda grafica si è fermata: si torna al disegno 2D
+      e.preventDefault();
+      cancelAnimationFrame(st.raf);
+      hero3d = null;
+      canvas.parentNode.replaceChild(old, canvas);
+      hero = old;
+      drawHero();
+    });
+
+    return { canvas: canvas, draw: kick };
+  }
+
   /* ---------- apertura: il vaso che si stampa ---------- */
   var hero = document.getElementById("heroVase");
   var readout = document.getElementById("heroReadout");
   var reprint = document.getElementById("reprint");
   var REAL_LAYERS = 900, LAYER_MM = 0.2, PRINT_MS = 5600;
-  var heroProgress = 1, heroRaf = 0, heroStart = 0;
+  var heroProgress = 1, heroRaf = 0, heroStart = 0, hero3d = null;
 
   function fmt(n, d) { return n.toFixed(d).replace(".", ","); }
   function setReadout(p) {
@@ -238,7 +486,8 @@
   }
   function drawHero() {
     if (!hero) return;
-    drawVase(hero, "trama", { progress: heroProgress, plate: true, nozzle: true });
+    if (hero3d) hero3d.draw();
+    else drawVase(hero, "trama", { progress: heroProgress, plate: true, nozzle: true });
     setReadout(heroProgress);
   }
   function printFrame(now) {
@@ -402,6 +651,10 @@
   /* ---------- avvio ---------- */
   function boot() {
     readColors();
+    if (hero && !hero3d) {
+      hero3d = makeHero3D(hero);
+      if (hero3d) hero = hero3d.canvas;
+    }
     cards.forEach(drawCard);
     drawFabric();
     startPrint();

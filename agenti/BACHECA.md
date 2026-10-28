@@ -5,23 +5,27 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 ## Settimana in corso
 
 - Branch: `settimana/2026-44`
-- Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (di nuovo in bozza)
-- Stato: riaperta dal titolare per una nuova richiesta (sito più futuristico, texture di filamento, effetti 3D): tocca al designer, poi sviluppatore e revisore
-- Esito della revisione: nessun problema trovato. Controllati a 400 px e 1280 px, tema chiaro e scuro, movimento ridotto: nessuno scorrimento orizzontale, nessun errore nella console (a parte i font esterni non raggiungibili dal test), tutte le sezioni visibili a fine scorrimento. Favicon e `theme-color` usano gli stessi valori dei token. Resta utile una prova a mano su un iPhone vero.
-- Lasciato al revisore: controllare l'apertura (titolo e sottotitolo ora visibili da subito, si spostano solo di 8 px), la comparsa delle sezioni, la favicon nuova (T chiara su fondo scuro con una linea bronzo, `assets/favicon.svg`) e i meta tag di condivisione in `index.html`.
-- Note dello sviluppatore:
-  - Safari e Firefox non erano disponibili per la prova: ho simulato in Chromium il loro ripiego (senza `animation-timeline`). Barra dei passi e comparsa funzionano. Una prova a mano su un iPhone vero resta utile.
-  - Il vaso che si stampa in apertura è pesante su telefono lento (fotogrammi da 200-500 ms con CPU 6x): non blocca più il titolo, ma è un candidato per una miglioria futura (meno strati disegnati su schermi piccoli).
-  - Open Graph senza `og:url` e `og:image`: servono il dominio e un'immagine, aspettano il titolare.
+- Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (in bozza)
+- Stato: il designer ha fatto la prima parte della nuova richiesta (texture di filamento e vaso 3D). Tocca allo sviluppatore (seconda parte: profondità e prestazioni del 3D), poi al revisore.
+- Fatto dal designer (28/10, sera):
+  - **Texture di filamento** sullo sfondo: strati da 4 px che ondeggiano e invertono la fase ogni quattro, come la trama dei vasi (`assets/filo.svg`, usata come maschera). Colore dal token `--texture` (chiaro e scuro), sfuma verso il basso a sinistra, è fissa e non si anima. Il `body` ora è trasparente e le fasce `.alt` lasciano trasparire appena la texture.
+  - **Vaso 3D in apertura**, in WebGL scritto a mano (circa 300 righe in `main.js`, nessuna libreria). Stessa forma e stessa texture "trama" del disegno 2D, 150 strati con solco e cresta. Si stampa strato per strato con lo strato in corso in bronzo, poi ruota piano, guarda verso il mouse e si gira trascinando col dito (scorrimento verticale della pagina invariato). "Ristampa" funziona ancora. Movimento ridotto: vaso intero e fermo. Senza WebGL (o se la scheda grafica si ferma) torna il disegno 2D di prima.
+  - **Perché niente three.js**: il titolare l'aveva autorizzato, ma pesa circa 600 KB e da questa sessione cdnjs non era raggiungibile, quindi non potevo provarlo né calcolarne l'impronta (SRI). Con WebGL diretto il vaso pesa pochi KB, si prova qui ed è più leggero sui telefoni. Se il titolare preferisce comunque three.js si può passare dopo.
+- Lasciato allo sviluppatore:
+  - prestazioni del 3D (già fatti: meno dettaglio e densità 1,5 sotto i 600 px, pausa quando il vaso è fuori schermo): manca il ripiego al 2D su telefoni lenti; da provare su un telefono vero;
+  - profondità leggera nel resto della pagina (vedi lista);
+  - su 400 px la riga "900 strati · 180 mm · modalità vaso" va a capo sotto il vaso: c'era già prima, da sistemare se lo ritieni utile.
+- Esito della revisione precedente: nessun problema trovato sulle animazioni allo scorrimento, favicon e meta tag (vedi registro).
 
 ## Lista migliorie
 
 Una riga per miglioria, la prima in alto è la più importante. Tra parentesi quadre il ruolo che la prende.
 
-- [ ] [designer] **Nuova priorità del titolare (28/10, sera)**: sito più futuristico e minimale, più accattivante ma sempre professionale.
+- [x] [designer] **Nuova priorità del titolare (28/10, sera)**: sito più futuristico e minimale, più accattivante ma sempre professionale.
   - Sfondo con la texture di un filamento: **il titolare lascia la scelta al designer** (che filamento, quanto visibile). Deve restare discreta, dietro ai contenuti, leggibile in chiaro e scuro.
   - **Vaso 3D vero in apertura** che ruota e segue il mouse o il dito. Il titolare **autorizza una libreria 3D** (per esempio three.js da cdnjs, versione fissa): è l'unica eccezione alla regola "niente librerie".
   - Restano fissi: nome, logo, caratteri, accento bronzo, testi. Movimento ridotto: tutto fermo e visibile.
+  - Fatto: texture di filamento e vaso 3D in WebGL senza librerie (vedi "Settimana in corso").
 - [ ] [sviluppatore] **Stessa richiesta, seconda parte**: profondità leggera nel resto della pagina (livelli che scorrono a velocità diverse, schede che si inclinano un poco al passaggio). Poi prestazioni del 3D su telefono: meno dettaglio su schermi piccoli, pausa quando il vaso è fuori schermo, ripiego statico se WebGL non c'è o il telefono è lento.
 - [x] [designer] **Priorità del titolare (28/10)**: animazioni mentre si scorre la pagina. Le sezioni devono comparire e sfumare con effetti di transizione curati; bottoni e link cliccabili con un effetto al passaggio del mouse (e al tocco su telefono). Obiettivo: un sito dall'aspetto professionale, non vistoso. Partire da ciò che esiste in `assets/styles.css` (sezione "movimento") e rispettare il movimento ridotto.
 - [ ] [designer] Menu su telefono: sotto gli 860 px i link alle sezioni spariscono. Proporre un menu compatto.
@@ -42,3 +46,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-28 · sviluppatore · Corretta la dissolvenza in uscita al caricamento, titolo d'apertura visibile da subito (LCP), favicon e meta Open Graph.
 - 2026-10-28 · revisore · Revisione della settimana 2026-44: tutto a posto, nessuna correzione necessaria, pull request #1 segnata pronta.
 - 2026-10-28 · titolare · Nuova richiesta: sito più futuristico e minimale, sfondo con texture di filamento, vaso 3D in apertura (libreria 3D autorizzata) e profondità leggera nel resto.
+- 2026-10-28 · designer · Texture di filamento sullo sfondo e vaso 3D in apertura (WebGL senza librerie, ripiego 2D), PR #1 di nuovo in bozza.
