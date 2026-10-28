@@ -26,6 +26,7 @@
   --foot-mark: #D3DADF;
   --crit: #B0382B;
   --texture: rgba(18, 23, 27, 0.06);
+  --shadow: #12171B;
 
   --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -59,6 +60,7 @@
     --foot-mark: #1E252B;
     --crit: #E7695A;
     --texture: rgba(231, 236, 239, 0.045);
+    --shadow: #000000;
     color-scheme: dark;
   }
 }
@@ -85,6 +87,7 @@
   --foot-mark: #1E252B;
   --crit: #E7695A;
   --texture: rgba(231, 236, 239, 0.045);
+  --shadow: #000000;
   color-scheme: dark;
 }
 
@@ -250,7 +253,7 @@ h3 {
     flex-direction: column; gap: 0; overflow: visible; padding: 4px 0 18px;
     padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
     background: var(--bg); border-bottom: 1px solid var(--line);
-    box-shadow: 0 18px 30px -24px color-mix(in srgb, var(--ink) 45%, transparent);
+    box-shadow: 0 18px 30px -24px color-mix(in srgb, var(--shadow) 45%, transparent);
     visibility: hidden; opacity: 0; transform: translateY(-6px);
     transition: opacity .22s ease, transform .3s cubic-bezier(0.22, 0.7, 0.2, 1), visibility 0s linear .3s;
   }
@@ -487,7 +490,7 @@ h3 {
     }
     .form-card:hover canvas {
       transform: perspective(700px) translateY(-3px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
-      box-shadow: 0 18px 30px -22px color-mix(in srgb, var(--ink) 55%, transparent);
+      box-shadow: 0 18px 30px -22px color-mix(in srgb, var(--shadow) 55%, transparent);
       transition-duration: 0.18s;
     }
     .faq summary:hover::after { transform: translateY(0) rotate(45deg); }
