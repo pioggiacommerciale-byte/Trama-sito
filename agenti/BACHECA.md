@@ -6,7 +6,7 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 - Branch: `settimana/2026-44`
 - Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (in bozza)
-- Stato: il designer ha fatto la prima parte della nuova richiesta (texture di filamento e vaso 3D). Tocca allo sviluppatore (seconda parte: profondità e prestazioni del 3D), poi al revisore.
+- Stato: designer e sviluppatore hanno finito la nuova richiesta (texture, vaso 3D, profondità, prestazioni). Tocca al revisore.
 - Fatto dal designer (28/10, sera):
   - **Texture di filamento** sullo sfondo: strati da 4 px che ondeggiano e invertono la fase ogni quattro, come la trama dei vasi (`assets/filo.svg`, usata come maschera). Colore dal token `--texture` (chiaro e scuro), sfuma verso il basso a sinistra, è fissa e non si anima. Il `body` ora è trasparente e le fasce `.alt` lasciano trasparire appena la texture.
   - **Vaso 3D in apertura**, in WebGL scritto a mano (circa 300 righe in `main.js`, nessuna libreria). Stessa forma e stessa texture "trama" del disegno 2D, 150 strati con solco e cresta. Si stampa strato per strato con lo strato in corso in bronzo, poi ruota piano, guarda verso il mouse e si gira trascinando col dito (scorrimento verticale della pagina invariato). "Ristampa" funziona ancora. Movimento ridotto: vaso intero e fermo. Senza WebGL (o se la scheda grafica si ferma) torna il disegno 2D di prima.
@@ -19,6 +19,14 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - prestazioni del 3D (già fatti: meno dettaglio e densità 1,5 sotto i 600 px, pausa quando il vaso è fuori schermo): manca il ripiego al 2D su telefoni lenti; da provare su un telefono vero;
   - profondità leggera nel resto della pagina (vedi lista);
   - su 400 px la riga "900 strati · 180 mm · modalità vaso" va a capo sotto il vaso: c'era già prima, da sistemare se lo ritieni utile.
+- Fatto dallo sviluppatore (28/10, notte):
+  - **Ripiego al 2D su telefoni lenti**: il vaso 3D misura i suoi primi fotogrammi (saltando l'avvio e le pause); se la mediana supera 45 ms (sotto i 22 fotogrammi al secondo) torna al disegno 2D, una volta sola, e libera la scheda grafica. Con risparmio dati attivo, 2 GB di memoria o meno, o telefono a 2 core il 3D non parte proprio. Provato qui simulando un telefono lento: torna al 2D senza errori; a velocità normale resta in 3D.
+  - **Profondità leggera** (solo con movimento non ridotto, e solo nei browser che legano le animazioni allo scorrimento: Chrome, Edge, Safari recenti; altrove tutto resta fermo): la texture di filamento scorre molto più piano della pagina (160 px su tutta la pagina); in apertura il testo esce un po' più in fretta e il vaso un po' più piano; titolo della fascia scura e primo piano della trama scartano di ±12 px; la scritta "Trama" in fondo sale mentre entra. Usa la proprietà `translate`, quindi non si somma con la comparsa delle sezioni.
+  - **Schede delle forme** che si inclinano verso il mouse (massimo 5 gradi, con un'ombra leggera), solo con mouse e movimento non ridotto.
+  - **Riga dei dati sotto il vaso** su 400 px: resta su una riga accanto a "Ristampa" (margini più stretti sotto i 480 px, al limite si taglia con i puntini invece di andare a capo).
+  - Miglioria dalla lista: **dati strutturati** per Google (solo nome e descrizione, nessun contatto).
+  - Nota per il designer: la texture ora si muove (piano) con lo scorrimento; era indicata come fissa. Se preferisci fissa basta togliere la regola `.filo` nel blocco "profondità leggera" di `styles.css`.
+- Lasciato al revisore: provare su un telefono vero il 3D e il ripiego; da questa sessione i caratteri di Google non si caricano, quindi le misure della riga dei dati sono state fatte con i caratteri di riserva.
 - Esito della revisione precedente: nessun problema trovato sulle animazioni allo scorrimento, favicon e meta tag (vedi registro).
 
 ## Lista migliorie
@@ -30,12 +38,12 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
   - **Vaso 3D vero in apertura** che ruota e segue il mouse o il dito. Il titolare **autorizza una libreria 3D** (per esempio three.js da cdnjs, versione fissa): è l'unica eccezione alla regola "niente librerie".
   - Restano fissi: nome, logo, caratteri, accento bronzo, testi. Movimento ridotto: tutto fermo e visibile.
   - Fatto: texture di filamento e vaso 3D in WebGL senza librerie (vedi "Settimana in corso").
-- [ ] [sviluppatore] **Stessa richiesta, seconda parte**: profondità leggera nel resto della pagina (livelli che scorrono a velocità diverse, schede che si inclinano un poco al passaggio). Poi prestazioni del 3D su telefono: meno dettaglio su schermi piccoli, pausa quando il vaso è fuori schermo, ripiego statico se WebGL non c'è o il telefono è lento.
+- [x] [sviluppatore] **Stessa richiesta, seconda parte**: profondità leggera nel resto della pagina (livelli che scorrono a velocità diverse, schede che si inclinano un poco al passaggio). Poi prestazioni del 3D su telefono: meno dettaglio su schermi piccoli, pausa quando il vaso è fuori schermo, ripiego statico se WebGL non c'è o il telefono è lento.
 - [x] [designer] **Priorità del titolare (28/10)**: animazioni mentre si scorre la pagina. Le sezioni devono comparire e sfumare con effetti di transizione curati; bottoni e link cliccabili con un effetto al passaggio del mouse (e al tocco su telefono). Obiettivo: un sito dall'aspetto professionale, non vistoso. Partire da ciò che esiste in `assets/styles.css` (sezione "movimento") e rispettare il movimento ridotto.
 - [x] [designer] Menu su telefono: sotto gli 860 px i link alle sezioni spariscono. Proporre un menu compatto. Fatto: bottone "Menu" con pannello (vedi "Settimana in corso").
 - [x] [sviluppatore] Favicon con la T di Trama e meta tag per la condivisione (Open Graph). Mancano `og:url` e `og:image`, in attesa del dominio.
 - [ ] [designer] Sezione Forme: preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto.
-- [ ] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma.
+- [x] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma. Fatto (JSON-LD in `index.html`); `url` si aggiunge col dominio.
 - [ ] [revisore] Controllo completo di contrasto e testi del sito attuale.
 
 ## Domande per il titolare
@@ -55,3 +63,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-28 · designer · Su richiesta del titolare: testi secondari più scuri (contrasto AA) e texture un poco più leggera.
 - 2026-10-28 · designer · Su seconda richiesta del titolare: testi secondari molto più scuri (chiaro) e più chiari (scuro), etichette mono a peso 500.
 - 2026-10-28 · designer · Corretto lo sfondo del body (in tema scuro i testi finivano su fondo bianco nell'anteprima).
+- 2026-10-28 · sviluppatore · Ripiego al 2D su telefoni lenti, profondità leggera allo scorrimento, schede delle forme inclinabili, riga dei dati su una riga a 400 px, dati strutturati (nome e descrizione). PR #1 in bozza, tocca al revisore.

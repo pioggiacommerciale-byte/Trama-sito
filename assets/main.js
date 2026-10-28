@@ -354,7 +354,7 @@
     function move(x, y, z) { return new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]); }
 
     /* stato del movimento */
-    var st = { yaw: -0.6, off: 0, offT: 0, tilt: 0, tiltT: 0, vel: 0, drag: null, last: 0, raf: 0, visible: true };
+    var st = { yaw: -0.6, off: 0, offT: 0, tilt: 0, tiltT: 0, vel: 0, drag: null, last: 0, raf: 0, visible: true, gone: false, measure: null };
 
     function render(now) {
       var rect = canvas.getBoundingClientRect();
@@ -410,10 +410,11 @@
         st.tilt += (st.tiltT - st.tilt) * Math.min(1, dt * 4);
       }
       render(now);
-      if (st.visible && !still()) st.raf = requestAnimationFrame(frame);
-      else st.last = 0;
+      if (st.visible && !still()) { st.measure(now); st.raf = requestAnimationFrame(frame); }
+      else { st.last = 0; }
+      if (st.gone) cancelAnimationFrame(st.raf);
     }
-    function kick() { if (!st.raf) st.raf = requestAnimationFrame(frame); }
+    function kick() { if (!st.raf && !st.gone) st.raf = requestAnimationFrame(frame); }
 
     // mouse: il vaso guarda verso il puntatore (poco: al massimo un terzo di giro e un filo d'inclinazione)
     if (finePointer) {
@@ -457,15 +458,42 @@
     canvas.setAttribute("aria-label", "Un vaso a strati che si stampa sul piatto della stampante e gira su se stesso");
     old.parentNode.replaceChild(canvas, old);
 
-    canvas.addEventListener("webglcontextlost", function (e) {
-      // la scheda grafica si è fermata: si torna al disegno 2D
-      e.preventDefault();
+    // ritorno al disegno 2D: se la scheda grafica si ferma o se il telefono non regge il 3D
+    function back2D() {
+      if (st.gone) return;
+      st.gone = true;
+      st.visible = false;
       cancelAnimationFrame(st.raf);
       hero3d = null;
-      canvas.parentNode.replaceChild(old, canvas);
+      if (canvas.parentNode) canvas.parentNode.replaceChild(old, canvas);
       hero = old;
       drawHero();
-    });
+      var ext = gl.getExtension("WEBGL_lose_context");
+      if (ext) try { ext.loseContext(); } catch (err) { /* niente */ }
+    }
+    canvas.addEventListener("webglcontextlost", function (e) { e.preventDefault(); back2D(); });
+
+    /* telefono lento: si misurano i primi fotogrammi in movimento (saltando i primi, che pagano l'avvio).
+       Se la mediana supera 45 ms (meno di 22 fotogrammi al secondo) si torna al 2D, una volta sola.
+       Le pause lunghe (scheda in secondo piano, vaso fuori schermo) non contano. */
+    var probe = { skip: 12, times: [], prev: 0 };
+    st.measure = function (now) {
+      if (!probe) return;
+      if (document.visibilityState !== "visible") { probe.prev = 0; return; }
+      if (probe.prev) {
+        var d = now - probe.prev;
+        if (d < 250) {
+          if (probe.skip > 0) probe.skip--;
+          else probe.times.push(d);
+        }
+      }
+      probe.prev = now;
+      if (probe.times.length >= 40) {
+        var t = probe.times.sort(function (a, b) { return a - b; })[20];
+        probe = null;
+        if (t > 45) back2D();
+      }
+    };
 
     return { canvas: canvas, draw: kick };
   }
@@ -523,7 +551,19 @@
       if (reduceMq.matches) return;
       last = 0; raf = requestAnimationFrame(spin);
     });
-    c.addEventListener("pointerleave", function () { cancelAnimationFrame(raf); raf = 0; });
+    c.addEventListener("pointerleave", function () {
+      cancelAnimationFrame(raf); raf = 0;
+      c.style.removeProperty("--tilt-x"); c.style.removeProperty("--tilt-y");
+    });
+    // la scheda si inclina un poco verso il puntatore (al massimo 5 gradi; stile in styles.css)
+    c.addEventListener("pointermove", function (e) {
+      if (reduceMq.matches || e.pointerType !== "mouse") return;
+      var r = c.getBoundingClientRect();
+      var x = clamp((e.clientX - r.left) / r.width - 0.5, -0.5, 0.5);
+      var y = clamp((e.clientY - r.top) / r.height - 0.5, -0.5, 0.5);
+      c.style.setProperty("--tilt-x", (x * 10).toFixed(2) + "deg");
+      c.style.setProperty("--tilt-y", (-y * 8).toFixed(2) + "deg");
+    });
   });
 
   /* ---------- primo piano della trama ---------- */
@@ -671,10 +711,19 @@
     });
   }
 
+  /* telefono modesto o risparmio dati attivo: resta il disegno 2D, senza nemmeno provare il 3D */
+  function lowEnd() {
+    var n = navigator, c = n.connection;
+    if (c && c.saveData) return true;
+    if (n.deviceMemory && n.deviceMemory <= 2) return true;
+    if (n.hardwareConcurrency && n.hardwareConcurrency <= 2 && !finePointer) return true;
+    return false;
+  }
+
   /* ---------- avvio ---------- */
   function boot() {
     readColors();
-    if (hero && !hero3d) {
+    if (hero && !hero3d && !lowEnd()) {
       hero3d = makeHero3D(hero);
       if (hero3d) hero = hero3d.canvas;
     }
