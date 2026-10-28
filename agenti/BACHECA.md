@@ -5,8 +5,9 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 ## Settimana in corso
 
 - Branch: `settimana/2026-44`
-- Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (bozza)
-- Stato: designer e sviluppatore fatti, tocca al revisore
+- Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (pronta)
+- Stato: settimana chiusa dal revisore, in attesa dell'approvazione del titolare
+- Esito della revisione: nessun problema trovato. Controllati a 400 px e 1280 px, tema chiaro e scuro, movimento ridotto: nessuno scorrimento orizzontale, nessun errore nella console (a parte i font esterni non raggiungibili dal test), tutte le sezioni visibili a fine scorrimento. Favicon e `theme-color` usano gli stessi valori dei token. Resta utile una prova a mano su un iPhone vero.
 - Lasciato al revisore: controllare l'apertura (titolo e sottotitolo ora visibili da subito, si spostano solo di 8 px), la comparsa delle sezioni, la favicon nuova (T chiara su fondo scuro con una linea bronzo, `assets/favicon.svg`) e i meta tag di condivisione in `index.html`.
 - Note dello sviluppatore:
   - Safari e Firefox non erano disponibili per la prova: ho simulato in Chromium il loro ripiego (senza `animation-timeline`). Barra dei passi e comparsa funzionano. Una prova a mano su un iPhone vero resta utile.
@@ -34,3 +35,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-28 · setup · Prima versione del sito e ruoli del team (designer, sviluppatore, revisore).
 - 2026-10-28 · designer · Animazioni allo scorrimento e effetti al passaggio/tocco su bottoni e link (branch settimana/2026-44, PR in bozza).
 - 2026-10-28 · sviluppatore · Corretta la dissolvenza in uscita al caricamento, titolo d'apertura visibile da subito (LCP), favicon e meta Open Graph.
+- 2026-10-28 · revisore · Revisione della settimana 2026-44: tutto a posto, nessuna correzione necessaria, pull request #1 segnata pronta.
