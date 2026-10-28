@@ -31,3 +31,17 @@ python3 -m http.server 8000
 ```
 
 e vai su http://localhost:8000.
+
+## Il team di agenti
+
+Tre agenti migliorano il sito un passo alla volta, a turni, e si passano il lavoro tramite `agenti/BACHECA.md`:
+
+| Ruolo | File | Turno |
+| --- | --- | --- |
+| Designer | `.claude/agents/designer.md` | apre la settimana: una miglioria visiva, branch `settimana/AAAA-SS`, pull request in bozza |
+| Sviluppatore | `.claude/agents/sviluppatore.md` | a metà settimana: completa, rifinisce, una miglioria tecnica |
+| Revisore | `.claude/agents/revisore.md` | chiude la settimana: controlla, corregge i dettagli, riepilogo per il titolare |
+
+Nessun agente scrive su `main`: ogni settimana arriva una pull request che il titolare approva o rifiuta.
+
+I ruoli sono adattati da [wshobson/agents](https://github.com/wshobson/agents) (licenza MIT). Gli originali sono in `agenti/originali/`.
