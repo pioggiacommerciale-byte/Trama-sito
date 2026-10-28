@@ -8,8 +8,8 @@
   --surface: #FFFFFF;
   --alt: #E6EAED;
   --ink: #12171B;
-  --ink-2: #4A555D;
-  --ink-3: #6E7A83;
+  --ink-2: #3E484F;
+  --ink-3: #525E67;
   --line: #D3DADF;
   --accent: #93571A;
   --accent-ink: #FFFFFF;
@@ -25,7 +25,7 @@
   --head-bg: rgba(238, 241, 243, 0.88);
   --foot-mark: #D3DADF;
   --crit: #B0382B;
-  --texture: rgba(18, 23, 27, 0.075);
+  --texture: rgba(18, 23, 27, 0.06);
 
   --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -41,8 +41,8 @@
     --surface: #161B1F;
     --alt: #13181C;
     --ink: #E7ECEF;
-    --ink-2: #A9B3BB;
-    --ink-3: #85919A;
+    --ink-2: #B7C0C7;
+    --ink-3: #9AA5AE;
     --line: #262E35;
     --accent: #D89D4C;
     --accent-ink: #1B1206;
@@ -54,11 +54,11 @@
     --fil-shade: #2E373F;
     --inv-bg: #E7ECEF;
     --inv-fg: #0F1316;
-    --inv-fg-2: #4A555D;
+    --inv-fg-2: #3E484F;
     --head-bg: rgba(15, 19, 22, 0.86);
     --foot-mark: #1E252B;
     --crit: #E7695A;
-    --texture: rgba(231, 236, 239, 0.055);
+    --texture: rgba(231, 236, 239, 0.045);
     color-scheme: dark;
   }
 }
@@ -67,8 +67,8 @@
   --surface: #161B1F;
   --alt: #13181C;
   --ink: #E7ECEF;
-  --ink-2: #A9B3BB;
-  --ink-3: #85919A;
+  --ink-2: #B7C0C7;
+  --ink-3: #9AA5AE;
   --line: #262E35;
   --accent: #D89D4C;
   --accent-ink: #1B1206;
@@ -80,11 +80,11 @@
   --fil-shade: #2E373F;
   --inv-bg: #E7ECEF;
   --inv-fg: #0F1316;
-  --inv-fg-2: #4A555D;
+  --inv-fg-2: #3E484F;
   --head-bg: rgba(15, 19, 22, 0.86);
   --foot-mark: #1E252B;
   --crit: #E7695A;
-  --texture: rgba(231, 236, 239, 0.055);
+  --texture: rgba(231, 236, 239, 0.045);
   color-scheme: dark;
 }
 
