@@ -92,9 +92,11 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* lo sfondo sta sia su html sia su body: se una pagina ospite (anteprime, app) dipinge il suo fondo
+   o toglie quello di html, il body resta comunque del colore giusto del tema.
+   isolation: il body fa da contesto, così la texture (.filo, z-index -1) sta sopra al suo fondo e sotto ai contenuti */
 html { background: var(--bg); color: var(--ink); }
-/* il body resta trasparente: così la texture di filamento (.filo, z-index -1) si vede dietro ai contenuti */
-body { color: var(--ink); }
+body { background: var(--bg); color: var(--ink); isolation: isolate; min-height: 100vh; }
 body {
   margin: 0;
   font-family: var(--f-body);
