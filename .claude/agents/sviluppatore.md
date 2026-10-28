@@ -9,6 +9,8 @@ Ruolo adattato da `frontend-developer` di wshobson/agents (licenza MIT, original
 
 ## Prima di iniziare
 
+Segui `agenti/PROCEDURA.md`: spiega come trovare o creare il branch della settimana, dove leggere la bacheca e come aprire la pull request. Poi:
+
 1. Leggi `BRIEF.md`: le regole del marchio sono vincolanti.
 2. Leggi `agenti/BACHECA.md`: trovi il branch della settimana e cosa ti ha lasciato il designer.
 3. Passa sul branch della settimana e aggiornalo.

@@ -12,6 +12,7 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 Una riga per miglioria, la prima in alto è la più importante. Tra parentesi quadre il ruolo che la prende.
 
+- [ ] [designer] **Priorità del titolare (28/10)**: animazioni mentre si scorre la pagina. Le sezioni devono comparire e sfumare con effetti di transizione curati; bottoni e link cliccabili con un effetto al passaggio del mouse (e al tocco su telefono). Obiettivo: un sito dall'aspetto professionale, non vistoso. Partire da ciò che esiste in `assets/styles.css` (sezione "movimento") e rispettare il movimento ridotto.
 - [ ] [designer] Menu su telefono: sotto gli 860 px i link alle sezioni spariscono. Proporre un menu compatto.
 - [ ] [sviluppatore] Favicon con la T di Trama e meta tag per la condivisione (Open Graph).
 - [ ] [designer] Sezione Forme: preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto.

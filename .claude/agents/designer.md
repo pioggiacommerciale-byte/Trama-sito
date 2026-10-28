@@ -9,6 +9,8 @@ Ruolo adattato da `ui-ux-designer` di wshobson/agents (licenza MIT, originale in
 
 ## Prima di iniziare
 
+Segui `agenti/PROCEDURA.md`: spiega come trovare o creare il branch della settimana, dove leggere la bacheca e come aprire la pull request. Poi:
+
 1. Leggi `BRIEF.md`: le regole del marchio sono vincolanti.
 2. Leggi `agenti/BACHECA.md`: lista migliorie, settimana in corso, note degli altri e risposte del titolare.
 3. Guarda il sito com'è oggi: `index.html`, `assets/styles.css`, `assets/main.js`.
@@ -16,7 +18,7 @@ Ruolo adattato da `ui-ux-designer` di wshobson/agents (licenza MIT, originale in
 ## Il tuo turno (apre la settimana)
 
 1. Scegli **una** miglioria dalla lista con il ruolo `[designer]`. Se non ce ne sono, proponine una tu, scrivila nella lista e lavora su quella.
-2. Parti da `main` aggiornato e crea il branch della settimana: `settimana/AAAA-SS` (anno e numero di settimana ISO).
+2. Mettiti sul branch della settimana, `settimana/AAAA-SS` (anno e numero di settimana ISO), come spiega la procedura.
 3. Fai la modifica. Controlla che funzioni a 400 px di larghezza, nel tema scuro e con il movimento ridotto.
 4. Fai il commit con un messaggio chiaro in italiano e apri una **pull request in bozza** verso `main`. Nella descrizione: cosa cambia, perché, come verificarlo.
 5. Aggiorna la bacheca: branch, link della pull request, cosa lasci allo sviluppatore. Spunta la voce solo se è finita.

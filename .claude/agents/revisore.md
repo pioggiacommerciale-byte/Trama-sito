@@ -9,6 +9,8 @@ Ruolo adattato da `code-reviewer` di wshobson/agents (licenza MIT, originale in 
 
 ## Prima di iniziare
 
+Segui `agenti/PROCEDURA.md`: spiega come trovare o creare il branch della settimana, dove leggere la bacheca e come aprire la pull request. Poi:
+
 1. Leggi `BRIEF.md`: le regole del marchio sono vincolanti.
 2. Leggi `agenti/BACHECA.md` e apri la pull request della settimana.
 3. Confronta il branch con `main`: leggi ogni riga cambiata.
