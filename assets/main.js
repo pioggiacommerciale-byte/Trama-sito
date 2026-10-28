@@ -335,6 +335,37 @@
     resizeT = setTimeout(redrawAll, 120);
   });
 
+  /* ---------- comparsa allo scorrimento ----------
+     Le sezioni salgono e sfumano quando entrano nello schermo (stile in styles.css, "movimento").
+     Si attiva solo se il movimento non è ridotto: altrimenti, o senza JavaScript, tutto resta visibile. */
+  (function () {
+    if (reduceMq.matches || !("IntersectionObserver" in window)) return;
+    var items = Array.prototype.slice.call(document.querySelectorAll(".reveal, .steps"));
+    if (!items.length) return;
+    // piccolo ritardo tra elementi vicini nello stesso gruppo, massimo quattro passi
+    items.forEach(function (el) {
+      if (!el.classList.contains("reveal")) return;
+      var i = 0, s = el.previousElementSibling;
+      while (s) { if (s.classList.contains("reveal")) i++; s = s.previousElementSibling; }
+      if (i) el.style.setProperty("--d", (Math.min(i, 3) * 0.08).toFixed(2) + "s");
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("is-in");
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+    // ciò che sta già sopra lo schermo (per esempio arrivando da un link #contatti) compare subito, senza animare
+    items.forEach(function (el) {
+      if (el.getBoundingClientRect().top < 0) el.classList.add("is-in"); else io.observe(el);
+    });
+    root.setAttribute("data-motion", "on");
+    if (reduceMq.addEventListener) reduceMq.addEventListener("change", function (e) {
+      if (e.matches) root.removeAttribute("data-motion");
+    });
+  })();
+
   /* ---------- modulo contatti ---------- */
   var form = document.getElementById("contactForm");
   var status = document.getElementById("formStatus");

@@ -316,25 +316,99 @@ h3 {
 }
 .foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--ink-3); font-size: 14px; }
 
-/* ---------- movimento ---------- */
+/* ---------- movimento ----------
+   Un solo linguaggio: le cose salgono di poco e sfumano, con una curva che rallenta alla fine.
+   Comparsa allo scorrimento: main.js mette data-motion="on" su <html> solo se il movimento
+   non è ridotto; senza JavaScript o con il movimento ridotto tutto è visibile e fermo. */
+:root {
+  --ease-out: cubic-bezier(0.22, 0.7, 0.2, 1);
+  --t-fast: 0.18s;
+  --t-reveal: 0.8s;
+  --rise: 22px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  /* apertura: i testi entrano in sequenza al caricamento */
+  .hero-copy > * { animation: rise 0.7s var(--ease-out) both; }
+  .hero-copy > :nth-child(2) { animation-delay: 0.06s; }
+  .hero-copy > :nth-child(3) { animation-delay: 0.14s; }
+  .hero-copy > :nth-child(4) { animation-delay: 0.22s; }
+  .printer { animation: fade 0.9s var(--ease-out) 0.1s both; }
+
+  /* comparsa allo scorrimento, con un piccolo ritardo tra elementi vicini (--d, da main.js) */
+  [data-motion="on"] .reveal {
+    opacity: 0; transform: translateY(var(--rise));
+    transition: opacity var(--t-reveal) var(--ease-out), transform var(--t-reveal) var(--ease-out);
+    transition-delay: var(--d, 0s);
+  }
+  [data-motion="on"] .reveal.is-in { opacity: 1; transform: none; }
+
+  /* barra dei tre passi: segue lo scorrimento dove il browser lo permette */
   @supports (animation-timeline: view()) {
-    .reveal {
-      /* solo 'forwards': prima di entrare nello schermo l'elemento resta visibile */
-      animation: rise linear forwards;
-      animation-timeline: view();
-      animation-range: entry 0% entry 40%;
-    }
     .steps::after {
       animation: fill linear both;
       animation-timeline: --steps;
       animation-range: entry 30% cover 55%;
     }
   }
+  /* altrove si riempie una volta, quando i passi entrano nello schermo */
+  @supports not (animation-timeline: view()) {
+    [data-motion="on"] .steps::after { transform: scaleX(0); transition: transform 1.2s var(--ease-out) 0.2s; }
+    [data-motion="on"] .steps.is-in::after { transform: scaleX(1); }
+  }
+
+  /* passaggio del mouse: solo spostamenti minimi */
+  @media (hover: hover) {
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--accent) 70%, transparent); }
+    .btn-ghost:hover { transform: translateY(-1px); }
+    .form-card canvas { transition: transform 0.35s var(--ease-out); }
+    .form-card:hover canvas { transform: translateY(-3px); }
+    .faq summary:hover::after { transform: translateY(0) rotate(45deg); }
+    .faq details[open] summary:hover::after { transform: translateY(-1px) rotate(225deg); }
+  }
 }
+
+/* stati interattivi: colore e linee, validi anche con il movimento ridotto */
+.btn { -webkit-tap-highlight-color: transparent; }
+.btn-primary:active { background: color-mix(in srgb, var(--accent) 80%, var(--ink)); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.btn-ghost:active { background: color-mix(in srgb, var(--ink) 9%, transparent); border-color: var(--ink-3); }
+
+/* link del menu: una linea sottile che si allunga da sinistra */
+.nav a { position: relative; padding-block: 6px; transition: color var(--t-fast) ease; }
+.nav a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px;
+  background: currentColor; transform: scaleX(0); transform-origin: left center;
+  transition: transform 0.3s var(--ease-out);
+}
+.nav a:hover::after, .nav a:focus-visible::after { transform: scaleX(1); }
+
+/* link di testo (Ristampa) */
+.link { transition: text-decoration-color var(--t-fast) ease, color var(--t-fast) ease; }
+.link:hover, .link:active { color: var(--ink); text-decoration-color: currentColor; }
+
+/* domande: la riga reagisce al passaggio e al tocco */
+.faq summary { transition: color var(--t-fast) ease; }
+.faq summary:hover { color: var(--ink); }
+.faq summary:hover::after { border-color: var(--ink); }
+.faq summary:active { color: var(--ink-2); }
+
+/* logo: si attenua appena */
+.logo { transition: opacity var(--t-fast) ease; }
+.logo:hover { opacity: 0.78; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn:active { transition: background-color var(--t-fast) ease, border-color var(--t-fast) ease; transform: none; }
+  .nav a::after { transition: none; }
+}
+
 @keyframes rise {
-  from { opacity: 0; transform: translateY(28px); }
+  from { opacity: 0; transform: translateY(var(--rise)); }
   to { opacity: 1; transform: none; }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 @keyframes fill {
   from { transform: scaleX(0); }
