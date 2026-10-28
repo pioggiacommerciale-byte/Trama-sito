@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trama · Stampa 3D su misura</title>
+<meta name="description" content="Vasi, lampade, bomboniere e statuette stampati in 3D su misura. Partiamo dalla tua idea, anche da una foto: il modello lo prepariamo noi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Vai al contenuto</a>
+
+<header class="site-head">
+  <div class="head-in">
+    <a class="logo" href="#top" aria-label="Trama, torna all'inizio">Trama</a>
+    <nav class="nav" aria-label="Sezioni">
+      <a href="#cosa">Cosa realizziamo</a>
+      <a href="#come">Come funziona</a>
+      <a href="#forme">Forme</a>
+      <a href="#domande">Domande</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#contatti">Scrivici</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- Apertura: chi siamo, cosa facciamo per te, come si comincia -->
+  <section class="hero" id="top">
+    <div class="hero-in">
+      <div class="hero-copy">
+        <p class="eyebrow">stampa 3D su misura</p>
+        <h1 class="display">Oggetti stampati in 3D, pensati per te.</h1>
+        <p class="lede">Vasi, lampade, bomboniere e statuette progettati su misura. Partiamo dalla tua idea, anche se per ora è solo una foto o uno schizzo.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#contatti">Raccontaci la tua idea</a>
+          <a class="btn btn-ghost" href="#forme">Guarda le forme</a>
+        </div>
+      </div>
+      <figure class="printer">
+        <canvas id="heroVase" role="img" aria-label="Un vaso che si stampa strato per strato sul piatto della stampante"></canvas>
+        <figcaption class="readout">
+          <span class="mono" id="heroReadout" aria-live="off">900 strati · 180 mm · modalità vaso</span>
+          <button class="link" id="reprint" type="button">Ristampa</button>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- La promessa principale -->
+  <section class="band" aria-labelledby="h-file">
+    <div class="band-in">
+      <h2 class="band-title" id="h-file">Non serve un file 3D.</h2>
+      <p>Basta un'idea, una foto o uno schizzo. Il modello lo prepariamo noi, poi decidi tu misure, colore e materiale.</p>
+    </div>
+  </section>
+
+  <!-- Cosa realizziamo -->
+  <section class="section" id="cosa" aria-labelledby="h-cosa">
+    <div class="sec-in">
+      <header class="sec-head">
+        <p class="eyebrow">Cosa realizziamo</p>
+        <h2 class="title" id="h-cosa">Ogni pezzo parte da una richiesta.</h2>
+      </header>
+      <div class="services">
+        <article class="service reveal">
+          <p class="tag">modalità vaso</p>
+          <h3>Vasi e lampade</h3>
+          <p>Forme generate su misura: spirali, onde, celle. Scegli altezza, diametro e colore, la texture la scriviamo strato per strato.</p>
+        </article>
+        <article class="service reveal">
+          <p class="tag">piccole serie</p>
+          <h3>Bomboniere</h3>
+          <p>Oggetti per matrimoni, battesimi e feste, con nomi, date o un disegno vostro. Tutti uguali o ognuno diverso.</p>
+        </article>
+        <article class="service reveal">
+          <p class="tag">da una foto</p>
+          <h3>Statuette</h3>
+          <p>Mandaci una foto e la trasformiamo in una statuetta da tenere sulla mensola o da regalare.</p>
+        </article>
+        <article class="service reveal">
+          <p class="tag">su richiesta</p>
+          <h3>Pezzi unici</h3>
+          <p>Un ricambio che non si trova più, un supporto, un oggetto che ancora non esiste: lo progettiamo e lo stampiamo.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Come funziona: tre passi reali, in ordine -->
+  <section class="section alt" id="come" aria-labelledby="h-come">
+    <div class="sec-in">
+      <header class="sec-head">
+        <p class="eyebrow">Come funziona</p>
+        <h2 class="title" id="h-come">Dall'idea all'oggetto in tre passi.</h2>
+      </header>
+      <ol class="steps">
+        <li class="step reveal">
+          <span class="num">01</span>
+          <h3>Raccontaci l'idea</h3>
+          <p>Scrivici due righe, mandaci una foto o uno schizzo. Non serve sapere niente di stampa 3D.</p>
+        </li>
+        <li class="step reveal">
+          <span class="num">02</span>
+          <h3>Ricevi l'anteprima</h3>
+          <p>Modelliamo l'oggetto e ti mandiamo un'anteprima con misure, colore e materiale. La correggiamo insieme finché non ti convince.</p>
+        </li>
+        <li class="step reveal">
+          <span class="num">03</span>
+          <h3>Stampa e consegna</h3>
+          <p>Stampiamo strato per strato, rifiniamo e controlliamo il pezzo, poi te lo consegniamo.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Forme: anteprime dal generatore, poi diventeranno il catalogo -->
+  <section class="section" id="forme" aria-labelledby="h-forme">
+    <div class="sec-in">
+      <header class="sec-head">
+        <p class="eyebrow">Forme</p>
+        <h2 class="title" id="h-forme">Pochi parametri, infinite varianti.</h2>
+        <p class="sec-lede">Ogni vaso nasce da altezza, diametro, torsione e texture. Queste sono quattro anteprime del nostro generatore: i parametri li regoliamo sulla tua richiesta.</p>
+      </header>
+      <div class="forms">
+        <figure class="form-card reveal">
+          <canvas data-style="spirale" role="img" aria-label="Vaso con costole a spirale"></canvas>
+          <figcaption><b>Spirale</b><span class="mono">12 costole · torsione 120°</span></figcaption>
+        </figure>
+        <figure class="form-card reveal">
+          <canvas data-style="onde" role="img" aria-label="Vaso con superficie a onde"></canvas>
+          <figcaption><b>Onde</b><span class="mono">7 onde · 3 file</span></figcaption>
+        </figure>
+        <figure class="form-card reveal">
+          <canvas data-style="voronoi" role="img" aria-label="Vaso con rilievi a celle Voronoi"></canvas>
+          <figcaption><b>Voronoi</b><span class="mono">28 celle · creste in rilievo</span></figcaption>
+        </figure>
+        <figure class="form-card reveal">
+          <canvas data-style="costine" role="img" aria-label="Vaso svasato con costine verticali"></canvas>
+          <figcaption><b>Costine</b><span class="mono">18 costine · svasato</span></figcaption>
+        </figure>
+      </div>
+      <p class="hint">Passa sopra una forma per farla girare.</p>
+    </div>
+  </section>
+
+  <!-- La firma: texture scritte nel G-code -->
+  <section class="section alt" id="firma" aria-labelledby="h-firma">
+    <div class="sec-in split">
+      <div class="split-copy">
+        <p class="eyebrow">Il dettaglio</p>
+        <h2 class="title" id="h-firma">Texture scritte nell'ugello.</h2>
+        <p>Di solito una texture si disegna sul modello 3D. Le nostre no: le scriviamo direttamente nel percorso dell'ugello, il G-code, così la superficie cambia strato dopo strato.</p>
+        <p>Ne esce una superficie che ricorda un tessuto. Una trama, appunto.</p>
+        <dl class="specs">
+          <div><dt>Ugello</dt><dd>0,4 mm</dd></div>
+          <div><dt>Modalità</dt><dd>vaso, una parete continua</dd></div>
+          <div><dt>Materiali</dt><dd>PLA, PETG, PETG-CF</dd></div>
+        </dl>
+      </div>
+      <figure class="fabric reveal">
+        <canvas id="fabric" role="img" aria-label="Primo piano degli strati con texture a trama"></canvas>
+        <figcaption class="mono">primo piano · 14 strati</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Domande frequenti -->
+  <section class="section" id="domande" aria-labelledby="h-domande">
+    <div class="sec-in narrow">
+      <header class="sec-head">
+        <p class="eyebrow">Domande</p>
+        <h2 class="title" id="h-domande">Quello che ci chiedono di più.</h2>
+      </header>
+      <div class="faq">
+        <details>
+          <summary>Mi serve un file 3D?</summary>
+          <p>No. Basta una foto, uno schizzo o una descrizione: il modello lo prepariamo noi. Se il file ce l'hai già, lo usiamo volentieri.</p>
+        </details>
+        <details>
+          <summary>Quanto costa?</summary>
+          <p>Dipende da dimensioni, materiale e da quanto lavoro di progettazione serve. Il prezzo te lo diciamo insieme all'anteprima, prima di stampare.</p>
+        </details>
+        <details>
+          <summary>Quanto tempo ci vuole?</summary>
+          <p>Dipende dall'oggetto e da quante correzioni facciamo insieme. Con l'anteprima ti diamo anche una data di consegna.</p>
+        </details>
+        <details>
+          <summary>Che materiali usate?</summary>
+          <p>PLA e PETG in vari colori. Per i pezzi che devono resistere di più usiamo PETG caricato con fibra di carbonio.</p>
+        </details>
+        <details>
+          <summary>Posso ordinare più pezzi uguali?</summary>
+          <p>Sì, per esempio per le bomboniere. Possiamo farli tutti identici oppure personalizzare ognuno con un nome.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contatti -->
+  <section class="section contact" id="contatti" aria-labelledby="h-contatti">
+    <div class="sec-in split">
+      <div class="split-copy">
+        <p class="eyebrow">Contatti</p>
+        <h2 class="title" id="h-contatti">Raccontaci la tua idea.</h2>
+        <p>Bastano due righe. Ti rispondiamo con qualche domanda o con una prima proposta.</p>
+      </div>
+      <form class="form" id="contactForm" data-to="" novalidate>
+        <div class="field">
+          <label for="f-nome">Nome</label>
+          <input id="f-nome" name="nome" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="f-tipo">Cosa vorresti realizzare</label>
+          <select id="f-tipo" name="tipo">
+            <option>Vaso o lampada</option>
+            <option>Bomboniere</option>
+            <option>Statuetta da foto</option>
+            <option>Pezzo unico</option>
+            <option>Non lo so ancora</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-idea">La tua idea</label>
+          <textarea id="f-idea" name="idea" rows="5" required placeholder="Per esempio: un vaso alto circa 25 cm, verde salvia, con la texture a onde."></textarea>
+        </div>
+        <div class="form-foot">
+          <button class="btn btn-primary" type="submit">Invia la richiesta</button>
+          <p class="form-status" id="formStatus" role="status"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="foot-in">
+    <p class="foot-mark" aria-hidden="true">Trama</p>
+    <div class="foot-row">
+      <p>Stampa 3D su misura</p>
+      <p class="mono">© 2026 Trama</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/main.js" defer></script>
+</body>
+</html>
