@@ -5,8 +5,8 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 ## Settimana in corso
 
 - Branch: `settimana/2026-44`
-- Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (in bozza)
-- Stato: designer e sviluppatore hanno finito la nuova richiesta (texture, vaso 3D, profondità, prestazioni). Tocca al revisore.
+- Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (pronta, in attesa del titolare)
+- Stato: revisione finita (28/10, sera). Settimana chiusa: tocca al titolare approvare e unire.
 - Fatto dal designer (28/10, sera):
   - **Texture di filamento** sullo sfondo: strati da 4 px che ondeggiano e invertono la fase ogni quattro, come la trama dei vasi (`assets/filo.svg`, usata come maschera). Colore dal token `--texture` (chiaro e scuro), sfuma verso il basso a sinistra, è fissa e non si anima. Il `body` ora è trasparente e le fasce `.alt` lasciano trasparire appena la texture.
   - **Vaso 3D in apertura**, in WebGL scritto a mano (circa 300 righe in `main.js`, nessuna libreria). Stessa forma e stessa texture "trama" del disegno 2D, 150 strati con solco e cresta. Si stampa strato per strato con lo strato in corso in bronzo, poi ruota piano, guarda verso il mouse e si gira trascinando col dito (scorrimento verticale della pagina invariato). "Ristampa" funziona ancora. Movimento ridotto: vaso intero e fermo. Senza WebGL (o se la scheda grafica si ferma) torna il disegno 2D di prima.
@@ -27,7 +27,9 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - Miglioria dalla lista: **dati strutturati** per Google (solo nome e descrizione, nessun contatto).
   - Nota per il designer: la texture ora si muove (piano) con lo scorrimento; era indicata come fissa. Se preferisci fissa basta togliere la regola `.filo` nel blocco "profondità leggera" di `styles.css`.
 - Lasciato al revisore: provare su un telefono vero il 3D e il ripiego; da questa sessione i caratteri di Google non si caricano, quindi le misure della riga dei dati sono state fatte con i caratteri di riserva.
-- Esito della revisione precedente: nessun problema trovato sulle animazioni allo scorrimento, favicon e meta tag (vedi registro).
+- Esito della revisione (28/10, sera): lette tutte le righe cambiate rispetto a `main`. Marchio, testi, token, contrasto, movimento ridotto, sicurezza: a posto. Provato a 400 e 1280 px, chiaro e scuro, con e senza movimento ridotto, menu (apertura, Esc, focus), comparsa allo scorrimento, 3D su schermo piccolo: nessun errore in console, nessuno scorrimento orizzontale.
+  - Corretto un dettaglio: il menu su telefono usava `addEventListener` sulla media query senza controllo; sui Safari vecchi (iOS 13 e prima) avrebbe fermato lo script (modulo contatti compreso). Ora c'è il controllo, come per le altre media query.
+  - Ancora da fare a mano: provare il 3D e il ripiego su un iPhone vero e su un Android economico (da qui non c'è un telefono vero, e i caratteri di Google non si caricano).
 
 ## Lista migliorie
 
@@ -44,7 +46,7 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - [x] [sviluppatore] Favicon con la T di Trama e meta tag per la condivisione (Open Graph). Mancano `og:url` e `og:image`, in attesa del dominio.
 - [ ] [designer] Sezione Forme: preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto.
 - [x] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma. Fatto (JSON-LD in `index.html`); `url` si aggiunge col dominio.
-- [ ] [revisore] Controllo completo di contrasto e testi del sito attuale.
+- [x] [revisore] Controllo completo di contrasto e testi del sito attuale. Fatto nella revisione del 28/10 sera: testi secondari tutti sopra 4,5:1, testi in italiano corretti.
 
 ## Domande per il titolare
 
@@ -64,3 +66,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-28 · designer · Su seconda richiesta del titolare: testi secondari molto più scuri (chiaro) e più chiari (scuro), etichette mono a peso 500.
 - 2026-10-28 · designer · Corretto lo sfondo del body (in tema scuro i testi finivano su fondo bianco nell'anteprima).
 - 2026-10-28 · sviluppatore · Ripiego al 2D su telefoni lenti, profondità leggera allo scorrimento, schede delle forme inclinabili, riga dei dati su una riga a 400 px, dati strutturati (nome e descrizione). PR #1 in bozza, tocca al revisore.
+- 2026-10-28 · revisore · Revisione finale della settimana 2026-44: un dettaglio corretto (menu su Safari vecchi), nessun problema grande, pull request #1 segnata pronta.

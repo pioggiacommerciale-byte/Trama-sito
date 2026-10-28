@@ -681,7 +681,9 @@
       if (e.key === "Escape" && head.classList.contains("is-open")) { set(false); btn.focus(); }
     });
     document.addEventListener("click", function (e) { if (!head.contains(e.target)) set(false); });
-    window.matchMedia("(min-width: 861px)").addEventListener("change", function (e) { if (e.matches) set(false); });
+    // Safari vecchi (iOS 13 e prima) non hanno addEventListener sulle media query: senza controllo lo script si fermerebbe qui
+    var wideMq = window.matchMedia("(min-width: 861px)");
+    if (wideMq.addEventListener) wideMq.addEventListener("change", function (e) { if (e.matches) set(false); });
   })();
 
   /* ---------- modulo contatti ---------- */
