@@ -328,20 +328,24 @@ h3 {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* apertura: i testi entrano in sequenza al caricamento */
+  /* apertura: i testi entrano in sequenza al caricamento.
+     Titolo e sottotitolo sono visibili dal primo istante (sono l'elemento più grande, conta per l'LCP):
+     si muovono solo di pochi pixel, senza sfumare. Etichetta e bottoni salgono e sfumano. */
   .hero-copy > * { animation: rise 0.7s var(--ease-out) both; }
-  .hero-copy > :nth-child(2) { animation-delay: 0.06s; }
-  .hero-copy > :nth-child(3) { animation-delay: 0.14s; }
-  .hero-copy > :nth-child(4) { animation-delay: 0.22s; }
+  .hero-copy > .display, .hero-copy > .lede { animation: settle 0.6s var(--ease-out) both; }
+  .hero-copy > .lede { animation-delay: 0.06s; }
+  .hero-copy > .actions { animation-delay: 0.14s; }
   .printer { animation: fade 0.9s var(--ease-out) 0.1s both; }
 
   /* comparsa allo scorrimento, con un piccolo ritardo tra elementi vicini (--d, da main.js) */
+  /* data-motion="ready": nascosti senza transizione (nessuna dissolvenza in uscita al caricamento);
+     data-motion="on": dal fotogramma successivo le transizioni sono attive */
+  [data-motion] .reveal { opacity: 0; transform: translateY(var(--rise)); }
   [data-motion="on"] .reveal {
-    opacity: 0; transform: translateY(var(--rise));
     transition: opacity var(--t-reveal) var(--ease-out), transform var(--t-reveal) var(--ease-out);
     transition-delay: var(--d, 0s);
   }
-  [data-motion="on"] .reveal.is-in { opacity: 1; transform: none; }
+  [data-motion] .reveal.is-in { opacity: 1; transform: none; }
 
   /* barra dei tre passi: segue lo scorrimento dove il browser lo permette */
   @supports (animation-timeline: view()) {
@@ -353,8 +357,9 @@ h3 {
   }
   /* altrove si riempie una volta, quando i passi entrano nello schermo */
   @supports not (animation-timeline: view()) {
-    [data-motion="on"] .steps::after { transform: scaleX(0); transition: transform 1.2s var(--ease-out) 0.2s; }
-    [data-motion="on"] .steps.is-in::after { transform: scaleX(1); }
+    [data-motion] .steps::after { transform: scaleX(0); }
+    [data-motion="on"] .steps::after { transition: transform 1.2s var(--ease-out) 0.2s; }
+    [data-motion] .steps.is-in::after { transform: scaleX(1); }
   }
 
   /* passaggio del mouse: solo spostamenti minimi */
@@ -405,6 +410,10 @@ h3 {
 @keyframes rise {
   from { opacity: 0; transform: translateY(var(--rise)); }
   to { opacity: 1; transform: none; }
+}
+@keyframes settle {
+  from { transform: translateY(8px); }
+  to { transform: none; }
 }
 @keyframes fade {
   from { opacity: 0; }

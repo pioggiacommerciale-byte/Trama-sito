@@ -357,10 +357,16 @@
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
     // ciò che sta già sopra lo schermo (per esempio arrivando da un link #contatti) compare subito, senza animare
+    // prima nasconde senza transizione ("ready"), poi attiva le transizioni al fotogramma successivo:
+    // così al caricamento le sezioni non sfumano in uscita prima di comparire
+    root.setAttribute("data-motion", "ready");
     items.forEach(function (el) {
       if (el.getBoundingClientRect().top < 0) el.classList.add("is-in"); else io.observe(el);
     });
-    root.setAttribute("data-motion", "on");
+    void root.offsetWidth;
+    requestAnimationFrame(function () {
+      if (root.hasAttribute("data-motion")) root.setAttribute("data-motion", "on");
+    });
     if (reduceMq.addEventListener) reduceMq.addEventListener("change", function (e) {
       if (e.matches) root.removeAttribute("data-motion");
     });
