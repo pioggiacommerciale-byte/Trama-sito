@@ -205,9 +205,69 @@ h3 {
 .nav { display: flex; gap: 22px; margin-left: auto; }
 .nav a { font-size: 15px; color: var(--ink-2); text-decoration: none; }
 .nav a:hover { color: var(--ink); }
+/* menu su telefono (sotto gli 860 px).
+   Senza JavaScript i link restano visibili in una riga che scorre in orizzontale sotto il logo.
+   Con JavaScript (data-menu sull'intestazione) diventano un pannello che si apre dal bottone "Menu". */
+.menu-btn {
+  display: none; align-items: center; gap: 10px; min-height: 38px; padding: 8px 12px;
+  margin-left: auto; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); border-radius: 9px;
+  background: transparent; color: var(--ink); font: 600 14.5px/1 var(--f-body); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--t-fast, .18s) ease, border-color var(--t-fast, .18s) ease;
+}
+.menu-btn:hover { border-color: var(--ink-3); background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.menu-btn:active { background: color-mix(in srgb, var(--ink) 9%, transparent); }
+/* due linee che diventano una croce: le stesse linee sottili del sito */
+.menu-ico { position: relative; width: 16px; height: 10px; flex: 0 0 auto; }
+.menu-ico::before, .menu-ico::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 1.5px; background: currentColor; border-radius: 1px;
+  transition: transform .3s cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+.menu-ico::before { top: 1px; }
+.menu-ico::after { bottom: 1px; }
+[aria-expanded="true"] > .menu-ico::before { transform: translateY(3.5px) rotate(45deg); }
+[aria-expanded="true"] > .menu-ico::after { transform: translateY(-3.5px) rotate(-45deg); }
+
 @media (max-width: 860px) {
-  .nav { display: none; }
+  .head-in { flex-wrap: wrap; column-gap: 12px; row-gap: 0; }
   .head-in .btn { margin-left: auto; }
+  /* senza JavaScript: riga di link sotto il logo */
+  .nav {
+    order: 3; flex: 1 0 100%; margin-left: 0; gap: 20px;
+    overflow-x: auto; scrollbar-width: none; padding-bottom: 8px;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { white-space: nowrap; }
+
+  /* con JavaScript: pannello sotto l'intestazione */
+  [data-menu] .head-in { flex-wrap: nowrap; }
+  [data-menu] .menu-btn { display: inline-flex; }
+  [data-menu] .head-in .btn { margin-left: 0; }
+  [data-menu] .nav {
+    position: absolute; left: 0; right: 0; top: 100%;
+    flex-direction: column; gap: 0; overflow: visible; padding: 4px 0 18px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    background: var(--bg); border-bottom: 1px solid var(--line);
+    box-shadow: 0 18px 30px -24px color-mix(in srgb, var(--ink) 45%, transparent);
+    visibility: hidden; opacity: 0; transform: translateY(-6px);
+    transition: opacity .22s ease, transform .3s cubic-bezier(0.22, 0.7, 0.2, 1), visibility 0s linear .3s;
+  }
+  [data-menu].is-open .nav {
+    visibility: visible; opacity: 1; transform: none;
+    transition: opacity .22s ease, transform .3s cubic-bezier(0.22, 0.7, 0.2, 1), visibility 0s;
+  }
+  [data-menu] .nav a {
+    display: flex; align-items: center; min-height: 52px; padding-block: 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--f-display); font-stretch: 112%; font-weight: 700; font-size: 22px; color: var(--ink);
+  }
+  [data-menu] .nav a:last-child { border-bottom: 0; }
+  [data-menu] .nav a::after { display: none; }
+  [data-menu] .nav a:active { color: var(--accent); }
+}
+@media (max-width: 860px) and (prefers-reduced-motion: reduce) {
+  [data-menu] .nav, [data-menu].is-open .nav { transform: none; transition: visibility 0s; }
+  .menu-ico::before, .menu-ico::after { transition: none; }
 }
 
 /* ---------- apertura ---------- */

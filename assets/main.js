@@ -621,6 +621,29 @@
     });
   })();
 
+  /* ---------- menu su telefono ----------
+     Il bottone "Menu" apre e chiude i link alle sezioni sotto gli 860 px.
+     Si chiude toccando un link, premendo Esc o toccando fuori. Senza JavaScript i link restano in una riga. */
+  (function () {
+    var head = document.querySelector(".site-head");
+    var btn = document.getElementById("menuBtn");
+    var menu = document.getElementById("menu");
+    if (!head || !btn || !menu) return;
+    head.setAttribute("data-menu", "");
+    btn.hidden = false;
+    function set(open) {
+      head.classList.toggle("is-open", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+    btn.addEventListener("click", function () { set(btn.getAttribute("aria-expanded") !== "true"); });
+    menu.addEventListener("click", function (e) { if (e.target.closest("a")) set(false); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && head.classList.contains("is-open")) { set(false); btn.focus(); }
+    });
+    document.addEventListener("click", function (e) { if (!head.contains(e.target)) set(false); });
+    window.matchMedia("(min-width: 861px)").addEventListener("change", function (e) { if (e.matches) set(false); });
+  })();
+
   /* ---------- modulo contatti ---------- */
   var form = document.getElementById("contactForm");
   var status = document.getElementById("formStatus");
