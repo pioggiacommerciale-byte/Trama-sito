@@ -5,7 +5,7 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 ## Settimana in corso
 
 - Branch: `settimana/2026-44`
-- Pull request: PR_LINK (bozza)
+- Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (bozza)
 - Stato: designer fatto, tocca allo sviluppatore
 - Lasciato allo sviluppatore: provare la comparsa allo scorrimento su Safari e Firefox (lì la barra dei passi usa la versione con IntersectionObserver); controllare che l'animazione d'apertura del titolo non peggiori il caricamento percepito (LCP) su telefono lento; se serve, accorciarla o toglierla dal titolo.
 
