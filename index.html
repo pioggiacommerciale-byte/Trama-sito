@@ -190,16 +190,31 @@
         <p class="eyebrow">Il dettaglio</p>
         <h2 class="title" id="h-firma">Texture scritte nell'ugello.</h2>
         <p>Di solito una texture si disegna sul modello 3D. Le nostre no: le scriviamo direttamente nel percorso dell'ugello, il G-code, così la superficie cambia strato dopo strato.</p>
-        <p>Ne esce una superficie che ricorda un tessuto. Una trama, appunto.</p>
+        <p>Ne esce una superficie che ricorda un tessuto. Una trama, appunto. Ne abbiamo sei: scegline una e guardala nascere strato dopo strato.</p>
         <dl class="specs reveal">
           <div><dt>Ugello</dt><dd>0,4 mm</dd></div>
           <div><dt>Modalità</dt><dd>vaso, una parete continua</dd></div>
           <div><dt>Materiali</dt><dd>PLA, PETG, PETG-CF</dd></div>
         </dl>
       </div>
-      <figure class="fabric reveal">
-        <canvas id="fabric" role="img" aria-label="Primo piano degli strati con texture a trama"></canvas>
-        <figcaption class="mono">primo piano · 14 strati</figcaption>
+      <!-- Le trame: stesse formule di Trama G-code Studio. Il riquadro stampa la trama scelta strato per strato -->
+      <figure class="fabric trame reveal">
+        <div class="tr-stage">
+          <canvas id="trCanvas" role="img" aria-label="Primo piano della parete stampata con la trama Intreccio"></canvas>
+          <p class="tr-readout mono" id="trRead" aria-hidden="true">Intreccio · 135 strati</p>
+        </div>
+        <figcaption class="tr-info" aria-live="polite">
+          <b id="trName">Intreccio</b>
+          <span id="trDesc">Gli strati ondeggiano in controfase e si incrociano: ne nasce una rete, come un tessuto.</span>
+        </figcaption>
+        <div class="tr-picker" id="trPicker" role="group" aria-label="Scegli una trama">
+          <button class="tr-chip" type="button" data-tex="weave" aria-pressed="true"><canvas aria-hidden="true"></canvas><span>Intreccio</span></button>
+          <button class="tr-chip" type="button" data-tex="diamond" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Diamanti</span></button>
+          <button class="tr-chip" type="button" data-tex="voronoi" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Voronoi</span></button>
+          <button class="tr-chip" type="button" data-tex="organic" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Organico</span></button>
+          <button class="tr-chip" type="button" data-tex="scales" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Squame</span></button>
+          <button class="tr-chip" type="button" data-tex="fuzzy" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Pelliccia</span></button>
+        </div>
       </figure>
     </div>
   </section>

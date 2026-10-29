@@ -1,7 +1,7 @@
 /* Trama — disegni e piccoli movimenti del sito.
    - vaso in apertura che si stampa strato per strato
    - catalogo: vaso, statuetta, lampada, bomboniera disegnati a strati (girano al passaggio del mouse)
-   - primo piano della texture a trama
+   - le sei trame di Trama G-code Studio, stampate strato per strato
    - modulo contatti
    Tutto rispetta prefers-reduced-motion e il tema chiaro/scuro. */
 (function () {
@@ -624,54 +624,246 @@
     });
   });
 
-  /* ---------- primo piano della trama ---------- */
-  var fabric = document.getElementById("fabric");
-  var fabricPhase = 0, fabricRaf = 0, fabricVisible = false, fabricLast = 0;
-  function drawFabric() {
-    if (!fabric) return;
-    var f = fit(fabric), ctx = f.ctx, W = f.W, H = f.H;
-    ctx.clearRect(0, 0, W, H);
-    var rows = 14, gap = H / (rows + 1), amp = gap * 0.28, freq = TAU / (W / 7);
-    var paths = [];
-    for (var b = 0; b < BINS; b++) paths.push(new Path2D());
-    var step = 3;
-    for (var i = 0; i < rows; i++) {
-      var y0 = gap * (i + 1), ph = (Math.floor(i / 3) % 2) * Math.PI + fabricPhase;
-      var lastBin = -1, px = 0, py = y0 + amp * Math.sin(ph);
-      for (var x = step; x <= W + step; x += step) {
-        var a = freq * x + ph, y = y0 + amp * Math.sin(a);
-        var slope = Math.cos(a);                        // -1..1
-        var inten = clamp(0.55 - 0.45 * slope + 0.1 * Math.sin(a), 0, 1);
-        var bin = Math.min(BINS - 1, Math.floor(inten * BINS));
-        if (bin !== lastBin) paths[bin].moveTo(px, py);
-        paths[bin].lineTo(x, y);
-        lastBin = bin; px = x; py = y;
-      }
+  /* ---------- le trame: le stesse formule di Trama G-code Studio ----------
+     Sei texture scritte nel percorso dell'ugello. Qui la parete del vaso è "srotolata":
+     raggio 40 mm, strati da 0,2 mm, proporzioni vere. Il riquadro grande stampa la trama scelta
+     strato per strato, con l'ugello che corre e gli ultimi strati ancora caldi; le miniature servono a sceglierla.
+     Se nessuno sceglie, le trame si alternano da sole. Movimento ridotto: trama intera e ferma, niente alternanza. */
+  var trame = (function () {
+    var stage = document.getElementById("trCanvas");
+    var none = { redraw: function () {}, boot: function () {} };
+    if (!stage) return none;
+    var picker = document.getElementById("trPicker");
+    var nameEl = document.getElementById("trName"), descEl = document.getElementById("trDesc"), readEl = document.getElementById("trRead");
+    var R0 = 40, LH = 0.2, LP = 3, Z0 = 40, SEED = 13, PRINT = 2600, HOLD = 3400;
+    var TEX = {
+      weave:   { name: "Intreccio", desc: "Gli strati ondeggiano in controfase e si incrociano: ne nasce una rete, come un tessuto.", p: { count: 30, shift: 0.5, shape: "tri" } },
+      diamond: { name: "Diamanti",  desc: "Due spirali opposte disegnano una zigrinatura a rombi.", p: { count: 40, pitch: 6 } },
+      voronoi: { name: "Voronoi",   desc: "Celle organiche separate da solchi sottili.", p: { size: 12, edge: 0.22 } },
+      organic: { name: "Organico",  desc: "Un rilievo morbido che segue la forma, con venature che ricordano una corteccia.", p: { size: 14, ridged: true } },
+      scales:  { name: "Squame",    desc: "File sfalsate di scaglie bombate.", p: { count: 20, rowH: 8 } },
+      fuzzy:   { name: "Pelliccia", desc: "Una superficie opaca e vellutata che nasconde le linee degli strati.", p: { size: 0.8 } }
+    };
+    var ORDER = ["weave", "diamond", "voronoi", "organic", "scales", "fuzzy"];
+
+    /* rumore e onde: copiati dal motore di Trama G-code Studio */
+    function fract(x) { return x - Math.floor(x); }
+    function sstep(e0, e1, x) { if (e1 <= e0) return x >= e1 ? 1 : 0; var t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); }
+    function wave(shape, x) { return shape === "tri" ? 4 * Math.abs(fract(x) - 0.5) - 1 : Math.cos(TAU * x); }
+    function hashU(a, b, c, s) {
+      var im = Math.imul;
+      var h = im(a | 0, 0x27d4eb2d) ^ im(b | 0, 0x165667b1) ^ im(c | 0, 0x61c88647) ^ im((s | 0) + 0x3c6ef372, 0x85ebca77);
+      h = im(h ^ (h >>> 15), 0x2c1b3c6d);
+      h = im(h ^ (h >>> 12), 0x297a2d39);
+      h ^= h >>> 15;
+      return (h >>> 0) / 4294967296;
     }
-    ctx.lineCap = "round";
-    ctx.lineWidth = gap * 0.78;
-    for (b = 0; b < BINS; b++) { ctx.strokeStyle = C.bins[b]; ctx.stroke(paths[b]); }
-  }
-  function fabricLoop(now) {
-    if (fabricLast) fabricPhase -= (now - fabricLast) * 0.00035;
-    fabricLast = now;
-    drawFabric();
-    if (fabricVisible && !reduceMq.matches) fabricRaf = requestAnimationFrame(fabricLoop);
-    else { fabricRaf = 0; fabricLast = 0; }
-  }
-  if (fabric && "IntersectionObserver" in window) {
-    new IntersectionObserver(function (entries) {
-      fabricVisible = entries[0].isIntersecting;
-      if (fabricVisible && !fabricRaf && !reduceMq.matches) fabricRaf = requestAnimationFrame(fabricLoop);
-    }).observe(fabric);
-  }
+    var GR = [1,1,0, -1,1,0, 1,-1,0, -1,-1,0, 1,0,1, -1,0,1, 1,0,-1, -1,0,-1, 0,1,1, 0,-1,1, 0,1,-1, 0,-1,-1];
+    function gdot(ix, iy, iz, s, x, y, z) { var g = ((hashU(ix, iy, iz, s) * 12) | 0) * 3; return GR[g] * x + GR[g + 1] * y + GR[g + 2] * z; }
+    function fadeC(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function perlin3(x, y, z, s) {
+      var ix = Math.floor(x), iy = Math.floor(y), iz = Math.floor(z), fx = x - ix, fy = y - iy, fz = z - iz;
+      var u = fadeC(fx), v = fadeC(fy), w = fadeC(fz);
+      return lerp(lerp(lerp(gdot(ix, iy, iz, s, fx, fy, fz), gdot(ix + 1, iy, iz, s, fx - 1, fy, fz), u),
+                       lerp(gdot(ix, iy + 1, iz, s, fx, fy - 1, fz), gdot(ix + 1, iy + 1, iz, s, fx - 1, fy - 1, fz), u), v),
+                  lerp(lerp(gdot(ix, iy, iz + 1, s, fx, fy, fz - 1), gdot(ix + 1, iy, iz + 1, s, fx - 1, fy, fz - 1), u),
+                       lerp(gdot(ix, iy + 1, iz + 1, s, fx, fy - 1, fz - 1), gdot(ix + 1, iy + 1, iz + 1, s, fx - 1, fy - 1, fz - 1), u), v), w);
+    }
+    function fbm3(x, y, z, s) {
+      var a = 1, f = 1, sum = 0, norm = 0;
+      for (var o = 0; o < 3; o++) { sum += a * perlin3(x * f, y * f, z * f, s + o * 31); norm += a; a *= 0.5; f *= 2.03; }
+      return sum / norm;
+    }
+    function worleyGap(x, y, z, s) {              // distanza tra la cella più vicina e la seconda
+      var ix = Math.floor(x), iy = Math.floor(y), iz = Math.floor(z), f1 = 1e9, f2 = 1e9;
+      for (var dz = -1; dz <= 1; dz++) for (var dy = -1; dy <= 1; dy++) for (var dx = -1; dx <= 1; dx++) {
+        var cx = ix + dx, cy = iy + dy, cz = iz + dz;
+        var px = cx + hashU(cx, cy, cz, s) - x, py = cy + hashU(cx, cy, cz, s + 101) - y, pz = cz + hashU(cx, cy, cz, s + 202) - z;
+        var d = px * px + py * py + pz * pz;
+        if (d < f1) { f2 = f1; f1 = d; } else if (d < f2) f2 = d;
+      }
+      return Math.sqrt(f2) - Math.sqrt(f1);
+    }
+
+    /* valore della trama in [-0,5; 0,5]. tRev: giri dall'inizio (strato + frazione), th: angolo, z: altezza in mm */
+    function texD(type, tRev, th, z) {
+      var p = TEX[type].p;
+      switch (type) {
+        case "weave": return 0.5 * wave(p.shape, (p.count + p.shift) * tRev);
+        case "diamond": { var a = p.count * th / TAU, v = z / p.pitch; return 0.25 * (wave("tri", a + v) + wave("tri", a - v)); }
+        case "fuzzy": {
+          var cpr = Math.max(8, Math.round(TAU * R0 / Math.max(0.2, p.size)));
+          var s = tRev * cpr, i0 = Math.floor(s), fr = s - i0, h0 = hashU(i0, 0, 0, SEED), h1 = hashU(i0 + 1, 0, 0, SEED);
+          return h0 + (h1 - h0) * fr - 0.5;
+        }
+        case "organic": {
+          var sc = 1 / p.size, n = fbm3(Math.cos(th) * R0 * sc, Math.sin(th) * R0 * sc, z * sc, SEED);
+          return p.ridged ? clamp(0.5 - 1.6 * Math.abs(n), -0.5, 0.5) : clamp(n * 1.25, -0.5, 0.5);
+        }
+        case "voronoi": {
+          var sv = 1 / p.size;
+          return sstep(0, p.edge, worleyGap(Math.cos(th) * R0 * sv, Math.sin(th) * R0 * sv, z * sv, SEED)) - 0.5;
+        }
+        case "scales": {
+          var x = p.count * th / TAU, y = z / p.rowH, jTop = Math.floor(y) + 1;
+          for (var j = jTop; j >= jTop - 3; j--) {
+            var off = (j & 1) ? 0.5 : 0, cx = Math.round(x - off) + off;
+            for (var c = -1; c <= 1; c++) {
+              var dx = (x - (cx + c)) / 0.62, dy = (y - j) / 0.95, q = dx * dx + dy * dy;
+              if (q < 1) return Math.sqrt(1 - q) * 0.9 - 0.4;
+            }
+          }
+          return -0.5;
+        }
+      }
+      return 0;
+    }
+
+    /* la parete srotolata come immagine: lp = pixel per strato (proporzioni vere: lp pixel = 0,2 mm in tutte e due le direzioni) */
+    function wallCanvas(type, Wpx, Hpx, lp) {
+      var rows = Math.ceil(Hpx / lp), vals = new Float32Array(Wpx * rows), mmPx = LH / lp, L0 = Math.round(Z0 / LH);
+      for (var y = 0; y < rows; y++) {
+        var layer = L0 + (rows - 1 - y), z = layer * LH;
+        for (var x = 0; x < Wpx; x++) { var th = x * mmPx / R0; vals[y * Wpx + x] = texD(type, layer + th / TAU, th, z); }
+      }
+      var cv = document.createElement("canvas"); cv.width = Wpx; cv.height = Hpx;
+      var cx = cv.getContext("2d"), img = cx.createImageData(Wpx, Hpx), d = img.data;
+      var s = getComputedStyle(root), base = hexToRgb(s.getPropertyValue("--fil-lit") || "#B4BEC5"), shadow = hexToRgb(s.getPropertyValue("--stage") || "#000000");
+      var bead = lp >= 3 ? [1.14, 1.0, 0.74] : lp === 2 ? [1.1, 0.8] : [1];
+      for (var py = 0; py < Hpx; py++) {
+        var row = Math.floor(py / lp), bf = bead[Math.min(bead.length - 1, Math.floor((py % lp) * bead.length / lp))];
+        for (var px = 0; px < Wpx; px++) {
+          var i = row * Wpx + px, v = vals[i];
+          var gx = (vals[row * Wpx + Math.min(Wpx - 1, px + 1)] - vals[row * Wpx + Math.max(0, px - 1)]) * lp;
+          var gy = lp === 1 ? (row > 0 ? vals[i - Wpx] : v) - (row < rows - 1 ? vals[i + Wpx] : v) : 0;
+          var light = clamp((0.72 + v * 0.6 - gx * 1.1 + gy * 0.8) * bf, 0, 1.3), l1 = Math.min(1, light), o = (py * Wpx + px) * 4;
+          for (var ch = 0; ch < 3; ch++) d[o + ch] = clamp(shadow[ch] * (1 - l1) * 0.35 + base[ch] * light, 0, 255);
+          d[o + 3] = 255;
+        }
+      }
+      cx.putImageData(img, 0, 0);
+      return cv;
+    }
+
+    var cur = "weave", img = null, cache = {}, raf = 0, t0 = 0, timer = 0, visible = false, started = false, picked = false, waiting = false;
+    var chips = picker ? Array.prototype.slice.call(picker.querySelectorAll(".tr-chip")) : [];
+
+    function stageSize() { var r = stage.getBoundingClientRect(); return [Math.max(1, Math.round(r.width)), Math.max(1, Math.round(r.height))]; }
+    function imageFor(type) {
+      var sz = stageSize(), key = type + ":" + sz[0] + "x" + sz[1];
+      if (!cache[key]) cache[key] = wallCanvas(type, sz[0], sz[1], LP);
+      return cache[key];
+    }
+    function setRead(p) {
+      if (!readEl) return;
+      var rows = Math.ceil(stageSize()[1] / LP);
+      readEl.textContent = p >= 1
+        ? TEX[cur].name + " · " + rows + " strati · " + fmt(rows * LH, 0) + " mm"
+        : "strato " + Math.max(1, Math.round(p * rows)) + " / " + rows + " · " + TEX[cur].name;
+    }
+    function nozzle(ctx, x, y) {
+      ctx.fillStyle = C.ink;
+      ctx.beginPath();
+      ctx.moveTo(x - 7, y - 24); ctx.lineTo(x + 7, y - 24); ctx.lineTo(x + 7, y - 11);
+      ctx.lineTo(x + 2.5, y - 3); ctx.lineTo(x - 2.5, y - 3); ctx.lineTo(x - 7, y - 11);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = C.accent;
+      ctx.beginPath(); ctx.arc(x, y, 2.6, 0, TAU); ctx.fill();
+    }
+    function draw(p, now) {
+      var f = fit(stage), ctx = f.ctx, W = f.W, H = f.H;
+      ctx.clearRect(0, 0, W, H);
+      if (!img) return;
+      if (!C.accent) readColors();
+      var rows = Math.ceil(H / LP), shown = p >= 1 ? rows : Math.floor(p * rows), yTop = Math.max(0, H - shown * LP);
+      if (p < 1) {                                                         // anteprima in trasparenza di quello che sta per essere stampato
+        ctx.globalAlpha = 0.14; ctx.drawImage(img, 0, 0, W, H); ctx.globalAlpha = 1;
+      }
+      if (H - yTop > 0) {
+        var k = img.height / H;
+        ctx.drawImage(img, 0, yTop * k, img.width, (H - yTop) * k, 0, yTop, W, H - yTop);
+      }
+      if (p >= 1) return;
+      var ac = hexToRgb(C.accent).join(",");
+      var heat = ctx.createLinearGradient(0, yTop, 0, yTop + LP * 12);    // strati appena stampati, ancora caldi
+      heat.addColorStop(0, "rgba(" + ac + ",0.55)"); heat.addColorStop(1, "rgba(" + ac + ",0)");
+      ctx.fillStyle = heat; ctx.fillRect(0, yTop, W, LP * 12);
+      var glow = ctx.createLinearGradient(0, yTop - LP * 9, 0, yTop);       // bagliore sopra lo strato in corso
+      glow.addColorStop(0, "rgba(" + ac + ",0)"); glow.addColorStop(1, "rgba(" + ac + ",0.22)");
+      ctx.fillStyle = glow; ctx.fillRect(0, yTop - LP * 9, W, LP * 9);
+      ctx.fillStyle = C.accent; ctx.fillRect(0, yTop - LP, W, Math.max(1.5, LP * 0.7));
+      nozzle(ctx, 14 + (W - 28) * (0.5 - 0.5 * Math.cos(now / 360)), yTop - LP * 0.6);   // l'ugello corre avanti e indietro
+    }
+    function loop(now) {
+      if (!t0) t0 = now;
+      var p = clamp((now - t0) / PRINT, 0, 1);
+      draw(p, now); setRead(p);
+      if (p < 1) { raf = requestAnimationFrame(loop); return; }
+      raf = 0; scheduleNext();
+    }
+    function nextOf(type) { return ORDER[(ORDER.indexOf(type) + 1) % ORDER.length]; }
+    function scheduleNext() {
+      clearTimeout(timer);
+      if (picked || reduceMq.matches) return;
+      var nx = nextOf(cur);
+      setTimeout(function () { imageFor(nx); }, 60);                       // prepara la prossima mentre si guarda questa
+      timer = setTimeout(function () {
+        if (picked) return;
+        if (!visible) { waiting = true; return; }
+        select(nx, true);
+      }, HOLD);
+    }
+    function select(type, animate) {
+      cur = type;
+      chips.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.tex === type)); });
+      if (nameEl) nameEl.textContent = TEX[type].name;
+      if (descEl) descEl.textContent = TEX[type].desc;
+      stage.setAttribute("aria-label", "Primo piano della parete stampata con la trama " + TEX[type].name);
+      img = imageFor(type);
+      cancelAnimationFrame(raf); raf = 0; clearTimeout(timer); waiting = false;
+      if (!animate || reduceMq.matches) { draw(1, 0); setRead(1); scheduleNext(); return; }
+      t0 = 0; raf = requestAnimationFrame(loop);
+    }
+    function drawThumbs() {
+      var dpr = Math.min(2, window.devicePixelRatio || 1);
+      chips.forEach(function (b, n) {
+        setTimeout(function () {
+          var c = b.querySelector("canvas"); if (!c) return;
+          var r = c.getBoundingClientRect(), w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+          var t = wallCanvas(b.dataset.tex, w, h, 1);
+          c.width = w; c.height = h; c.getContext("2d").drawImage(t, 0, 0);
+        }, 30 * n);
+      });
+    }
+    chips.forEach(function (b) {
+      b.addEventListener("click", function () { picked = true; select(b.dataset.tex, true); });
+    });
+    function start() {
+      if (started) return;
+      started = true;
+      drawThumbs();
+      select(cur, true);
+    }
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        if (visible && !started) start();
+        else if (visible && waiting) select(nextOf(cur), true);
+      }, { rootMargin: "0px 0px -15% 0px" }).observe(stage);
+    }
+    return {
+      boot: function () { if (!("IntersectionObserver" in window)) start(); },
+      redraw: function () { cache = {}; if (!started) return; drawThumbs(); img = imageFor(cur); if (!raf) { draw(1, 0); setRead(1); } }
+    };
+  })();
 
   /* ---------- ridisegno: tema, dimensioni ---------- */
   function redrawAll() {
     readColors();
     drawHero();
     cards.forEach(drawCard);
-    drawFabric();
+    trame.redraw();
   }
   function onTheme() { redrawAll(); }
   if (darkMq.addEventListener) darkMq.addEventListener("change", onTheme);
@@ -812,7 +1004,7 @@
       if (hero3d) hero = hero3d.canvas;
     }
     cards.forEach(drawCard);
-    drawFabric();
+    trame.boot();
     startPrint();
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot); else boot();
