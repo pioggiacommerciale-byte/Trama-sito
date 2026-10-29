@@ -322,11 +322,12 @@ h3 {
 .sec-in.narrow > * { max-width: 860px; }
 .sec-head { display: grid; gap: 16px; }
 
-/* cosa realizziamo: lista aperta a due colonne */
-.services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(28px, 4vw, 56px); }
+/* cosa realizziamo: lista aperta, tre colonne su schermo largo */
+.services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(28px, 4vw, 56px); }
 .service { display: grid; gap: 10px; align-content: start; padding-block: 26px 34px; border-top: 1px solid var(--line); min-width: 0; }
 .service p:last-child { color: var(--ink-2); max-width: 46ch; }
 .tag { font-family: var(--f-mono); font-size: 12.5px; color: var(--accent); }
+@media (max-width: 980px) { .services { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) { .services { grid-template-columns: minmax(0, 1fr); } }
 
 /* come funziona: tre passi con una barra che si riempie */
@@ -345,7 +346,7 @@ h3 {
 .num { font-family: var(--f-mono); font-size: 14px; color: var(--accent); font-weight: 500; }
 @media (max-width: 760px) { .steps { grid-template-columns: minmax(0, 1fr); } }
 
-/* forme */
+/* catalogo */
 .forms { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .form-card { margin: 0; display: grid; gap: 12px; min-width: 0; }
 .form-card canvas {
@@ -399,6 +400,26 @@ h3 {
 .field textarea { resize: vertical; min-height: 120px; }
 .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline-offset: 1px; }
 .field [aria-invalid="true"] { border-color: var(--crit); }
+
+/* scelta del tipo di oggetto: bottoni a pillola, anche più di uno */
+.choice { border: 0; margin: 0; padding: 0; min-width: 0; }
+.choice legend { padding: 0; margin-bottom: 10px; font-size: 14px; font-weight: 500; color: var(--ink-2); }
+.choice .opt { font-weight: 400; color: var(--ink-3); margin-left: 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { position: relative; display: inline-flex; }
+.chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.chip span {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 8px 15px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--bg);
+  font-size: 15px; line-height: 1.2; color: var(--ink);
+  transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+.chip input:hover + span { border-color: var(--ink-3); }
+.chip input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 500; }
+.chip input:checked + span::before { content: "✓"; font-size: 13px; line-height: 1; }
+.chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chip input:active + span { transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) { .chip span { transition: none; } .chip input:active + span { transform: none; } }
 .form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
 .form-status { font-size: 14px; color: var(--ink-2); max-width: 44ch; }
 
@@ -483,7 +504,7 @@ h3 {
   @media (hover: hover) {
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--accent) 70%, transparent); }
     .btn-ghost:hover { transform: translateY(-1px); }
-    /* le schede delle forme si inclinano un poco verso il mouse (--tilt-x/--tilt-y da main.js) */
+    /* le schede del catalogo si inclinano un poco verso il mouse (--tilt-x/--tilt-y da main.js) */
     .form-card canvas {
       transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
       transform: perspective(700px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));

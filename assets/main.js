@@ -1,6 +1,6 @@
 /* Trama — disegni e piccoli movimenti del sito.
    - vaso in apertura che si stampa strato per strato
-   - quattro forme del generatore (girano al passaggio del mouse)
+   - catalogo: vaso, statuetta, lampada, bomboniera disegnati a strati (girano al passaggio del mouse)
    - primo piano della texture a trama
    - modulo contatti
    Tutto rispetta prefers-reduced-motion e il tema chiaro/scuro. */
@@ -93,6 +93,47 @@
     costine: {
       ctrl: [0.52, 0.56, 0.62, 0.72, 0.86, 0.98], layers: 110, samples: 120,
       tex: function (th) { return 0.05 * Math.pow(Math.abs(Math.cos(9 * th)), 6); }
+    },
+
+    /* Catalogo: oggetti diversi disegnati con gli stessi strati.
+       r(th, t, i, a) dà il raggio relativo intero; a = altezza / raggio massimo, serve per teste e pomelli tondi.
+       h: altezza relativa (la bomboniera è più piccola); glow: luce calda dentro il paralume [altezza, raggio]. */
+    statuetta: {
+      layers: 124, samples: 110,
+      r: function (th, t, i, a) {
+        if (t < 0.012) return 0.60;                                   // basamento
+        if (t < 0.06) return 0.64;
+        if (t < 0.075) return 0.58;
+        var head = 0.145 * a * 0.68 * Math.sqrt(Math.max(0, 1 - Math.pow((t - 0.855) / 0.145, 2)));
+        if (t > 0.665) return Math.max(t < 0.76 ? 0.11 : 0, head);    // collo e testa
+        var r;
+        if (t < 0.42) r = 0.22 + 0.20 * Math.pow(1 - (t - 0.075) / 0.345, 1.6);   // veste, si stringe in vita
+        else if (t < 0.60) r = 0.22 + 0.13 * smooth(0.42, 0.60, t);                // busto
+        else r = Math.max(0.11, 0.35 * Math.sqrt(Math.max(0, 1 - Math.pow((t - 0.60) / 0.065, 2)))); // spalle
+        var e = 0.10 + 0.52 * smooth(0.36, 0.58, t);                  // sezione ovale: spalle larghe, corpo sottile
+        return r * (1 + e * Math.cos(2 * th));
+      }
+    },
+    lampada: {
+      layers: 120, samples: 120, glow: [0.66, 1.05],
+      r: function (th, t) {
+        if (t < 0.03) return 0.46;                                     // piede
+        if (t < 0.07) return 0.14 + 0.32 * Math.sqrt(Math.max(0, 1 - Math.pow((t - 0.03) / 0.04, 2)));
+        if (t < 0.44) return 0.055;                                    // stelo
+        var s = (t - 0.44) / 0.56;                                     // paralume a costine
+        return 0.92 - 0.30 * s + 0.024 * Math.sin(28 * th);
+      }
+    },
+    bomboniera: {
+      layers: 90, samples: 120, h: 0.62,
+      r: function (th, t, i, a) {
+        if (t < 0.56) return 0.74 + 0.08 * Math.sin(Math.PI * t / 0.56) + 0.016 * Math.cos(16 * th); // scatolina
+        if (t < 0.60) return 0.70;                                     // fessura del coperchio
+        if (t < 0.66) return 0.80;                                     // bordo del coperchio
+        if (t < 0.88) { var s = (t - 0.66) / 0.22; return 0.78 * Math.sqrt(1 - 0.88 * s * s); } // coperchio
+        var knob = 0.06 * a * Math.sqrt(Math.max(0, 1 - Math.pow((t - 0.94) / 0.06, 2)));
+        return Math.max(t < 0.92 ? 0.12 : 0, knob);                    // pomello
+      }
     }
   };
 
@@ -118,8 +159,11 @@
     var rot = opts.rot || 0;
     var N = S.layers, M = S.samples;
     var k = 0.26;                                  // schiacciamento dell'ellisse (vista dall'alto)
+    var sh = S.h || 1;                             // oggetti più piccoli (bomboniera)
     var Hv = H * (opts.plate ? 0.60 : 0.66);       // altezza del vaso
-    var R = Math.min(W * 0.30, Hv * 0.40);         // raggio massimo
+    var R = Math.min(W * 0.30, Hv * 0.40) * sh;    // raggio massimo
+    Hv *= sh;
+    var asp = Hv / R;                              // per le parti tonde (teste, pomelli)
     var baseY = H * (opts.plate ? 0.80 : 0.86);
     var cx = W / 2;
     var gap = Hv / N;
@@ -154,7 +198,21 @@
     for (var b = 0; b < BINS; b++) paths.push(new Path2D());
     var rs = new Float32Array(M + 3), xs = new Float32Array(M + 1), ys = new Float32Array(M + 1);
 
-    function radiusAt(th, t, i) { return R * (profile(S.ctrl, t) + S.tex(th - rot, t, i)); }
+    function radiusAt(th, t, i) {
+      var u = th - rot;
+      return R * (S.r ? S.r(u, t, i, asp) : profile(S.ctrl, t) + S.tex(u, t, i));
+    }
+
+    // luce calda dentro il paralume: passa tra uno strato e l'altro
+    if (S.glow) {
+      var gy = baseY - S.glow[0] * Hv, gr = R * S.glow[1], ac = hexToRgb(C.accent).join(",");
+      var grd = ctx.createRadialGradient(cx, gy, 0, cx, gy, gr);
+      grd.addColorStop(0, "rgba(" + ac + ",0.45)");
+      grd.addColorStop(0.55, "rgba(" + ac + ",0.16)");
+      grd.addColorStop(1, "rgba(" + ac + ",0)");
+      ctx.fillStyle = grd;
+      ctx.fillRect(cx - gr, gy - gr, gr * 2, gr * 2);
+    }
 
     for (var i = 0; i < done; i++) {
       var t = i / (N - 1), y = baseY - t * Hv;
@@ -533,7 +591,7 @@
   }
   if (reprint) reprint.addEventListener("click", startPrint);
 
-  /* ---------- forme del generatore ---------- */
+  /* ---------- catalogo ---------- */
   var cards = Array.prototype.slice.call(document.querySelectorAll(".form-card canvas"));
   var cardRot = new Map();
   function drawCard(c) { drawVase(c, c.dataset.style, { rot: cardRot.get(c) || 0 }); }
@@ -689,6 +747,28 @@
   /* ---------- modulo contatti ---------- */
   var form = document.getElementById("contactForm");
   var status = document.getElementById("formStatus");
+  // l'esempio nel campo "La tua idea" segue l'oggetto scelto
+  var IDEA_EX = {
+    Statuetta: "Per esempio: una statuetta di mia nonna da una foto, alta circa 15 cm.",
+    Quadro: "Per esempio: un quadro con il disegno di mio figlio, da appendere in cameretta.",
+    Vaso: "Per esempio: un vaso alto circa 25 cm, verde salvia, con la texture a onde.",
+    Lampada: "Per esempio: una lampada da comodino con il paralume a costine e la luce calda.",
+    Segnaposto: "Per esempio: 80 segnaposti con i nomi degli invitati, per un matrimonio.",
+    Bomboniera: "Per esempio: 60 scatoline con le iniziali degli sposi e la data.",
+    Gioco: "Per esempio: le pedine di un gioco da tavolo con i colori della nostra squadra.",
+    Altro: "Raccontaci cosa ti serve, anche solo in due righe."
+  };
+  var idea = document.getElementById("f-idea");
+  var ideaDefault = idea ? idea.getAttribute("placeholder") : "";
+  if (form && idea) {
+    form.addEventListener("change", function (e) {
+      var t = e.target;
+      if (!t || t.name !== "tipo") return;
+      if (t.checked && IDEA_EX[t.value]) { idea.setAttribute("placeholder", IDEA_EX[t.value]); return; }
+      var on = form.querySelector('input[name="tipo"]:checked');
+      idea.setAttribute("placeholder", on && IDEA_EX[on.value] ? IDEA_EX[on.value] : ideaDefault);
+    });
+  }
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -705,9 +785,11 @@
         return;
       }
       var d = new FormData(form);
-      var body = "Nome: " + d.get("nome") + "\nEmail: " + d.get("email") + "\nTipo: " + d.get("tipo") + "\n\n" + d.get("idea");
+      var tipi = d.getAll("tipo");
+      var tipo = tipi.length ? tipi.join(", ") : "da definire";
+      var body = "Nome: " + d.get("nome") + "\nEmail: " + d.get("email") + "\nOggetto: " + tipo + "\n\n" + d.get("idea");
       window.location.href = "mailto:" + encodeURIComponent(to) +
-        "?subject=" + encodeURIComponent("Richiesta dal sito: " + d.get("tipo")) +
+        "?subject=" + encodeURIComponent("Richiesta dal sito: " + tipo) +
         "&body=" + encodeURIComponent(body);
       status.textContent = "Ti apriamo il programma di posta con il messaggio già scritto: controllalo e invialo.";
     });

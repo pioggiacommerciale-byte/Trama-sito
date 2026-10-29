@@ -32,6 +32,11 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - Turno fuori programma (richiesta del titolare): riprovati i ripieghi a 400 px. Senza WebGL, con WebGL che dà errore, con la scheda grafica che si ferma e con risparmio dati: torna il disegno 2D, senza errori. Telefono lento simulato (fotogrammi da 66-110 ms): torna al 2D dopo circa 4-7 secondi, poi gira fluido. Movimento ridotto: vaso 3D intero e fermo, profondità e texture ferme, menu senza animazione.
   - Terza verifica (28/10, sera, revisore): riletti i commit dello sviluppatore e del designer, riprovati ripiego al 2D (fotogrammi lenti, 2 GB di memoria, risparmio dati), schede inclinabili, riga dei dati a 400 px su una riga, dati strutturati, sfondo del body in chiaro e scuro. Corretto un dettaglio: nel tema scuro l'ombra delle schede delle forme (e del pannello del menu) usava il colore del testo, quindi diventava un alone chiaro. Ora usa il nuovo token `--shadow` (scuro in entrambi i temi).
   - Ancora da fare a mano: provare il 3D e il ripiego su un iPhone vero e su un Android economico (da qui non c'è un telefono vero, e i caratteri di Google non si caricano).
+- Richiesta del titolare (29/10), fatta in chat da Claude (coordinatore), sullo stesso branch:
+  - **Modulo contatti**: al posto del menu a tendina, bottoni a pillola con scelta multipla: Statuetta, Quadro, Vaso, Lampada, Segnaposto, Bomboniera, Gioco, Altro. L'esempio nel campo "La tua idea" cambia con l'oggetto scelto. Nella mail l'oggetto diventa "Richiesta dal sito: Bomboniera, Segnaposto".
+  - **Catalogo** (ex Forme, ora `#catalogo`): non più quattro vasi ma un esempio per tipo: vaso, statuetta, lampada (accesa, con luce calda tra gli strati), bomboniera (più piccola). Disegnati con lo stesso `drawVase`: per forme non da vaso c'è `r(th, t, i, a)` in `STYLES`, più `h` e `glow`.
+  - **Testi verso la varietà**: apertura, descrizioni per Google e per la condivisione, "Cosa realizziamo" con sei voci (Statuette, Quadri, Vasi e lampade, Bomboniere e segnaposti, Giochi, Pezzi unici, tre colonne su schermo largo), domanda sulle serie, `BRIEF.md`.
+  - Per il revisore: controllare i nuovi testi di Quadri e Giochi (descrizioni generiche, nessun dato inventato) e la scelta multipla con tastiera e lettore di schermo.
 
 ## Lista migliorie
 
@@ -71,3 +76,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-28 · revisore · Revisione finale della settimana 2026-44: un dettaglio corretto (menu su Safari vecchi), nessun problema grande, pull request #1 segnata pronta.
 - 2026-10-28 · revisore · Turno fuori programma: riprovati prestazioni su telefono, movimento ridotto e ripieghi senza WebGL. Tutto a posto, nessuna modifica al sito, PR #1 resta pronta.
 - 2026-10-28 · revisore · Terza verifica: ombra delle schede e del menu non più chiara nel tema scuro (nuovo token `--shadow`). PR #1 resta pronta.
+- 2026-10-29 · coordinatore · Richiesta del titolare: modulo con più tipi di oggetto (scelta multipla), catalogo vario (vaso, statuetta, lampada, bomboniera), testi del sito verso la varietà.

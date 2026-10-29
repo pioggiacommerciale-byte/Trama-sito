@@ -4,17 +4,19 @@ Questo file è il punto di riferimento per chiunque modifichi il sito, persone o
 
 ## Chi siamo
 
-Trama è una piccola azienda di stampa 3D. Realizziamo oggetti su misura, pensati per ogni singolo cliente:
+Trama è una piccola azienda di stampa 3D. Realizziamo oggetti su misura, pensati per ogni singolo cliente, e puntiamo sulla **varietà**: il sito non deve sembrare un negozio di vasi.
 
-- vasi e lampade, con forme generate su misura e texture scritte nel G-code;
-- bomboniere e piccole serie per eventi;
 - statuette ricavate da una foto;
+- quadri;
+- vasi e lampade, con forme generate su misura e texture scritte nel G-code;
+- bomboniere e segnaposti, anche in piccole serie per eventi;
+- giochi e giocattoli;
 - pezzi unici su richiesta.
 
 ## Il messaggio
 
 1. Tutto parte dal cliente: un'idea, una foto o uno schizzo. **Non serve un file 3D.**
-2. Il sito spiega cosa facciamo e come lavoriamo. Non è un negozio: la sezione Forme mostra esempi, non prodotti a scaffale.
+2. Il sito spiega cosa facciamo e come lavoriamo. Non è un negozio: la sezione Catalogo mostra un esempio per tipo di oggetto (vaso, statuetta, lampada, bomboniera), non prodotti a scaffale.
 3. La nostra firma sono le texture scritte direttamente nel percorso dell'ugello (G-code), strato per strato, in modalità vaso.
 
 ## Marchio
