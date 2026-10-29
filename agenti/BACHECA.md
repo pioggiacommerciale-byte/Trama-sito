@@ -37,6 +37,10 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - **Catalogo** (ex Forme, ora `#catalogo`): non più quattro vasi ma un esempio per tipo: vaso, statuetta, lampada (accesa, con luce calda tra gli strati), bomboniera (più piccola). Disegnati con lo stesso `drawVase`: per forme non da vaso c'è `r(th, t, i, a)` in `STYLES`, più `h` e `glow`.
   - **Testi verso la varietà**: apertura, descrizioni per Google e per la condivisione, "Cosa realizziamo" con sei voci (Statuette, Quadri, Vasi e lampade, Bomboniere e segnaposti, Giochi, Pezzi unici, tre colonne su schermo largo), domanda sulle serie, `BRIEF.md`.
   - Per il revisore: controllare i nuovi testi di Quadri e Giochi (descrizioni generiche, nessun dato inventato) e la scelta multipla con tastiera e lettore di schermo.
+- Seconda richiesta del titolare (29/10), fatta in chat da Claude (coordinatore):
+  - **Le trame** nella sezione “Il dettaglio”: al posto delle onde animate, le sei trame di Trama G-code Studio (Intreccio, Diamanti, Voronoi, Organico, Squame, Pelliccia), calcolate con le stesse formule dello strumento (rumore, celle, onde copiati dal suo motore). Parete srotolata con proporzioni vere: raggio 40 mm, strati da 0,2 mm, 3 px per strato.
+  - **Animazione nuova**: il riquadro stampa la trama scelta dal basso verso l'alto, con l'ugello che corre, la linea bronzo dello strato in corso e gli ultimi strati ancora caldi; sopra, in trasparenza, la trama che sta per nascere. Sei miniature per scegliere; se nessuno sceglie, le trame si alternano da sole (pausa 3,4 s). Movimento ridotto: trama intera e ferma, niente alternanza.
+  - Calcolo di una trama a grandezza piena: 60-130 ms su computer; la successiva si prepara durante la pausa. Per il revisore: provare su un telefono vero il tempo al tocco di Voronoi e Organico (le più pesanti).
 
 ## Lista migliorie
 
@@ -77,3 +81,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-28 · revisore · Turno fuori programma: riprovati prestazioni su telefono, movimento ridotto e ripieghi senza WebGL. Tutto a posto, nessuna modifica al sito, PR #1 resta pronta.
 - 2026-10-28 · revisore · Terza verifica: ombra delle schede e del menu non più chiara nel tema scuro (nuovo token `--shadow`). PR #1 resta pronta.
 - 2026-10-29 · coordinatore · Richiesta del titolare: modulo con più tipi di oggetto (scelta multipla), catalogo vario (vaso, statuetta, lampada, bomboniera), testi del sito verso la varietà.
+- 2026-10-29 · coordinatore · Richiesta del titolare: sezione “Il dettaglio” con le sei trame di Trama G-code Studio e animazione di stampa strato per strato.
