@@ -4,7 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Trama · Stampa 3D su misura</title>
-<meta name="description" content="Vasi, lampade, bomboniere e statuette stampati in 3D su misura. Partiamo dalla tua idea, anche da una foto: il modello lo prepariamo noi.">
+<meta name="description" content="Statuette, quadri, vasi, lampade, bomboniere e giochi stampati in 3D su misura. Partiamo dalla tua idea, anche da una foto: il modello lo prepariamo noi.">
+<meta name="theme-color" content="#EEF1F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1316" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- condivisione (Open Graph). og:url e og:image si aggiungono quando il dominio è confermato: vanno scritti con l'indirizzo completo -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="Trama">
+<meta property="og:title" content="Trama · Stampa 3D su misura">
+<meta property="og:description" content="Statuette, quadri, vasi, lampade, bomboniere e giochi stampati in 3D su misura. Partiamo dalla tua idea, anche da una foto: il modello lo prepariamo noi.">
+<meta name="twitter:card" content="summary">
+<!-- dati strutturati per i motori di ricerca: solo nome e descrizione.
+     Indirizzo, telefono, email e url si aggiungono quando il titolare li conferma (vedi BRIEF.md) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Trama",
+  "description": "Stampa 3D su misura: statuette, quadri, vasi, lampade, bomboniere, segnaposti e giochi. Partiamo dalla tua idea, anche da una foto: il modello lo prepariamo noi."
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -12,14 +33,18 @@
 </head>
 <body>
 <a class="skip" href="#main">Vai al contenuto</a>
+<div class="filo" aria-hidden="true"></div>
 
 <header class="site-head">
   <div class="head-in">
     <a class="logo" href="#top" aria-label="Trama, torna all'inizio">Trama</a>
-    <nav class="nav" aria-label="Sezioni">
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu" hidden>
+      <span class="menu-ico" aria-hidden="true"></span>Menu
+    </button>
+    <nav class="nav" id="menu" aria-label="Sezioni">
       <a href="#cosa">Cosa realizziamo</a>
       <a href="#come">Come funziona</a>
-      <a href="#forme">Forme</a>
+      <a href="#catalogo">Catalogo</a>
       <a href="#domande">Domande</a>
     </nav>
     <a class="btn btn-primary btn-sm" href="#contatti">Scrivici</a>
@@ -34,10 +59,10 @@
       <div class="hero-copy">
         <p class="eyebrow">stampa 3D su misura</p>
         <h1 class="display">Oggetti stampati in 3D, pensati per te.</h1>
-        <p class="lede">Vasi, lampade, bomboniere e statuette progettati su misura. Partiamo dalla tua idea, anche se per ora è solo una foto o uno schizzo.</p>
+        <p class="lede">Statuette, quadri, vasi, lampade, bomboniere e giochi, progettati su misura. Partiamo dalla tua idea, anche se per ora è solo una foto o uno schizzo.</p>
         <div class="actions">
           <a class="btn btn-primary" href="#contatti">Raccontaci la tua idea</a>
-          <a class="btn btn-ghost" href="#forme">Guarda le forme</a>
+          <a class="btn btn-ghost" href="#catalogo">Guarda il catalogo</a>
         </div>
       </div>
       <figure class="printer">
@@ -53,19 +78,29 @@
   <!-- La promessa principale -->
   <section class="band" aria-labelledby="h-file">
     <div class="band-in">
-      <h2 class="band-title" id="h-file">Non serve un file 3D.</h2>
-      <p>Basta un'idea, una foto o uno schizzo. Il modello lo prepariamo noi, poi decidi tu misure, colore e materiale.</p>
+      <h2 class="band-title reveal" id="h-file">Non serve un file 3D.</h2>
+      <p class="reveal">Basta un'idea, una foto o uno schizzo. Il modello lo prepariamo noi, poi decidi tu misure, colore e materiale.</p>
     </div>
   </section>
 
   <!-- Cosa realizziamo -->
   <section class="section" id="cosa" aria-labelledby="h-cosa">
     <div class="sec-in">
-      <header class="sec-head">
+      <header class="sec-head reveal">
         <p class="eyebrow">Cosa realizziamo</p>
         <h2 class="title" id="h-cosa">Ogni pezzo parte da una richiesta.</h2>
       </header>
       <div class="services">
+        <article class="service reveal">
+          <p class="tag">da una foto</p>
+          <h3>Statuette</h3>
+          <p>Mandaci una foto e la trasformiamo in una statuetta da tenere sulla mensola o da regalare.</p>
+        </article>
+        <article class="service reveal">
+          <p class="tag">da appendere</p>
+          <h3>Quadri</h3>
+          <p>Una foto, un disegno o una scritta diventano un quadro stampato in 3D, per casa tua o da regalare.</p>
+        </article>
         <article class="service reveal">
           <p class="tag">modalità vaso</p>
           <h3>Vasi e lampade</h3>
@@ -73,13 +108,13 @@
         </article>
         <article class="service reveal">
           <p class="tag">piccole serie</p>
-          <h3>Bomboniere</h3>
-          <p>Oggetti per matrimoni, battesimi e feste, con nomi, date o un disegno vostro. Tutti uguali o ognuno diverso.</p>
+          <h3>Bomboniere e segnaposti</h3>
+          <p>Per matrimoni, battesimi e feste, con nomi, date o un disegno vostro. Tutti uguali o ognuno diverso.</p>
         </article>
         <article class="service reveal">
-          <p class="tag">da una foto</p>
-          <h3>Statuette</h3>
-          <p>Mandaci una foto e la trasformiamo in una statuetta da tenere sulla mensola o da regalare.</p>
+          <p class="tag">per giocare</p>
+          <h3>Giochi</h3>
+          <p>Giochi e giocattoli progettati su misura, con i colori, le forme e i nomi che vuoi tu.</p>
         </article>
         <article class="service reveal">
           <p class="tag">su richiesta</p>
@@ -93,7 +128,7 @@
   <!-- Come funziona: tre passi reali, in ordine -->
   <section class="section alt" id="come" aria-labelledby="h-come">
     <div class="sec-in">
-      <header class="sec-head">
+      <header class="sec-head reveal">
         <p class="eyebrow">Come funziona</p>
         <h2 class="title" id="h-come">Dall'idea all'oggetto in tre passi.</h2>
       </header>
@@ -117,33 +152,34 @@
     </div>
   </section>
 
-  <!-- Forme: anteprime dal generatore, poi diventeranno il catalogo -->
-  <section class="section" id="forme" aria-labelledby="h-forme">
+  <!-- Catalogo: un esempio per tipo di oggetto, disegnati a strati come escono dalla stampante.
+       Quando ci sono le foto dei lavori veri, vanno al posto dei disegni (vedi BRIEF.md) -->
+  <section class="section" id="catalogo" aria-labelledby="h-catalogo">
     <div class="sec-in">
-      <header class="sec-head">
-        <p class="eyebrow">Forme</p>
-        <h2 class="title" id="h-forme">Pochi parametri, infinite varianti.</h2>
-        <p class="sec-lede">Ogni vaso nasce da altezza, diametro, torsione e texture. Queste sono quattro anteprime del nostro generatore: i parametri li regoliamo sulla tua richiesta.</p>
+      <header class="sec-head reveal">
+        <p class="eyebrow">Catalogo</p>
+        <h2 class="title" id="h-catalogo">Un oggetto diverso per ogni richiesta.</h2>
+        <p class="sec-lede">Vasi, statuette, lampade, bomboniere: quattro esempi di quello che stampiamo. Ognuno lo progettiamo da capo, nelle misure e nei colori che scegli tu.</p>
       </header>
       <div class="forms">
         <figure class="form-card reveal">
           <canvas data-style="spirale" role="img" aria-label="Vaso con costole a spirale"></canvas>
-          <figcaption><b>Spirale</b><span class="mono">12 costole · torsione 120°</span></figcaption>
+          <figcaption><b>Vaso</b><span class="mono">spirale · 12 costole</span></figcaption>
         </figure>
         <figure class="form-card reveal">
-          <canvas data-style="onde" role="img" aria-label="Vaso con superficie a onde"></canvas>
-          <figcaption><b>Onde</b><span class="mono">7 onde · 3 file</span></figcaption>
+          <canvas data-style="statuetta" role="img" aria-label="Statuetta stilizzata di una figura su un basamento tondo"></canvas>
+          <figcaption><b>Statuetta</b><span class="mono">da una foto · figura intera</span></figcaption>
         </figure>
         <figure class="form-card reveal">
-          <canvas data-style="voronoi" role="img" aria-label="Vaso con rilievi a celle Voronoi"></canvas>
-          <figcaption><b>Voronoi</b><span class="mono">28 celle · creste in rilievo</span></figcaption>
+          <canvas data-style="lampada" role="img" aria-label="Lampada da tavolo accesa, con paralume a costine"></canvas>
+          <figcaption><b>Lampada</b><span class="mono">paralume a costine · luce calda</span></figcaption>
         </figure>
         <figure class="form-card reveal">
-          <canvas data-style="costine" role="img" aria-label="Vaso svasato con costine verticali"></canvas>
-          <figcaption><b>Costine</b><span class="mono">18 costine · svasato</span></figcaption>
+          <canvas data-style="bomboniera" role="img" aria-label="Bomboniera: scatolina tonda con coperchio e pomello"></canvas>
+          <figcaption><b>Bomboniera</b><span class="mono">scatolina con coperchio</span></figcaption>
         </figure>
       </div>
-      <p class="hint">Passa sopra una forma per farla girare.</p>
+      <p class="hint reveal">Passa sopra un oggetto per farlo girare.</p>
     </div>
   </section>
 
@@ -154,16 +190,31 @@
         <p class="eyebrow">Il dettaglio</p>
         <h2 class="title" id="h-firma">Texture scritte nell'ugello.</h2>
         <p>Di solito una texture si disegna sul modello 3D. Le nostre no: le scriviamo direttamente nel percorso dell'ugello, il G-code, così la superficie cambia strato dopo strato.</p>
-        <p>Ne esce una superficie che ricorda un tessuto. Una trama, appunto.</p>
-        <dl class="specs">
+        <p>Ne esce una superficie che ricorda un tessuto. Una trama, appunto. Ne abbiamo sei: scegline una e guardala nascere strato dopo strato.</p>
+        <dl class="specs reveal">
           <div><dt>Ugello</dt><dd>0,4 mm</dd></div>
           <div><dt>Modalità</dt><dd>vaso, una parete continua</dd></div>
           <div><dt>Materiali</dt><dd>PLA, PETG, PETG-CF</dd></div>
         </dl>
       </div>
-      <figure class="fabric reveal">
-        <canvas id="fabric" role="img" aria-label="Primo piano degli strati con texture a trama"></canvas>
-        <figcaption class="mono">primo piano · 14 strati</figcaption>
+      <!-- Le trame: stesse formule di Trama G-code Studio. Il riquadro stampa la trama scelta strato per strato -->
+      <figure class="fabric trame reveal">
+        <div class="tr-stage">
+          <canvas id="trCanvas" role="img" aria-label="Primo piano della parete stampata con la trama Intreccio"></canvas>
+          <p class="tr-readout mono" id="trRead" aria-hidden="true">Intreccio · 135 strati</p>
+        </div>
+        <figcaption class="tr-info">
+          <b id="trName">Intreccio</b>
+          <span id="trDesc">Gli strati ondeggiano in controfase e si incrociano: ne nasce una rete, come un tessuto.</span>
+        </figcaption>
+        <div class="tr-picker" id="trPicker" role="group" aria-label="Scegli una trama">
+          <button class="tr-chip" type="button" data-tex="weave" aria-pressed="true"><canvas aria-hidden="true"></canvas><span>Intreccio</span></button>
+          <button class="tr-chip" type="button" data-tex="diamond" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Diamanti</span></button>
+          <button class="tr-chip" type="button" data-tex="voronoi" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Voronoi</span></button>
+          <button class="tr-chip" type="button" data-tex="organic" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Organico</span></button>
+          <button class="tr-chip" type="button" data-tex="scales" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Squame</span></button>
+          <button class="tr-chip" type="button" data-tex="fuzzy" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>Pelliccia</span></button>
+        </div>
       </figure>
     </div>
   </section>
@@ -171,11 +222,11 @@
   <!-- Domande frequenti -->
   <section class="section" id="domande" aria-labelledby="h-domande">
     <div class="sec-in narrow">
-      <header class="sec-head">
+      <header class="sec-head reveal">
         <p class="eyebrow">Domande</p>
         <h2 class="title" id="h-domande">Quello che ci chiedono di più.</h2>
       </header>
-      <div class="faq">
+      <div class="faq reveal">
         <details>
           <summary>Mi serve un file 3D?</summary>
           <p>No. Basta una foto, uno schizzo o una descrizione: il modello lo prepariamo noi. Se il file ce l'hai già, lo usiamo volentieri.</p>
@@ -194,7 +245,7 @@
         </details>
         <details>
           <summary>Posso ordinare più pezzi uguali?</summary>
-          <p>Sì, per esempio per le bomboniere. Possiamo farli tutti identici oppure personalizzare ognuno con un nome.</p>
+          <p>Sì, per esempio per bomboniere e segnaposti. Possiamo farli tutti identici oppure personalizzare ognuno con un nome.</p>
         </details>
       </div>
     </div>
@@ -208,7 +259,7 @@
         <h2 class="title" id="h-contatti">Raccontaci la tua idea.</h2>
         <p>Bastano due righe. Ti rispondiamo con qualche domanda o con una prima proposta.</p>
       </div>
-      <form class="form" id="contactForm" data-to="" novalidate>
+      <form class="form reveal" id="contactForm" data-to="" novalidate>
         <div class="field">
           <label for="f-nome">Nome</label>
           <input id="f-nome" name="nome" type="text" autocomplete="name" required>
@@ -217,19 +268,22 @@
           <label for="f-email">Email</label>
           <input id="f-email" name="email" type="email" autocomplete="email" required>
         </div>
-        <div class="field">
-          <label for="f-tipo">Cosa vorresti realizzare</label>
-          <select id="f-tipo" name="tipo">
-            <option>Vaso o lampada</option>
-            <option>Bomboniere</option>
-            <option>Statuetta da foto</option>
-            <option>Pezzo unico</option>
-            <option>Non lo so ancora</option>
-          </select>
-        </div>
+        <fieldset class="choice">
+          <legend>Cosa vorresti realizzare <span class="opt">anche più di uno</span></legend>
+          <div class="chips">
+            <label class="chip"><input id="t-statuetta" type="checkbox" name="tipo" value="Statuetta"><span>Statuetta</span></label>
+            <label class="chip"><input id="t-quadro" type="checkbox" name="tipo" value="Quadro"><span>Quadro</span></label>
+            <label class="chip"><input id="t-vaso" type="checkbox" name="tipo" value="Vaso"><span>Vaso</span></label>
+            <label class="chip"><input id="t-lampada" type="checkbox" name="tipo" value="Lampada"><span>Lampada</span></label>
+            <label class="chip"><input id="t-segnaposto" type="checkbox" name="tipo" value="Segnaposto"><span>Segnaposto</span></label>
+            <label class="chip"><input id="t-bomboniera" type="checkbox" name="tipo" value="Bomboniera"><span>Bomboniera</span></label>
+            <label class="chip"><input id="t-gioco" type="checkbox" name="tipo" value="Gioco"><span>Gioco</span></label>
+            <label class="chip"><input id="t-altro" type="checkbox" name="tipo" value="Altro"><span>Altro</span></label>
+          </div>
+        </fieldset>
         <div class="field">
           <label for="f-idea">La tua idea</label>
-          <textarea id="f-idea" name="idea" rows="5" required placeholder="Per esempio: un vaso alto circa 25 cm, verde salvia, con la texture a onde."></textarea>
+          <textarea id="f-idea" name="idea" rows="5" required placeholder="Per esempio: una statuetta da una foto, alta circa 15 cm, oppure 60 bomboniere con le iniziali degli sposi."></textarea>
         </div>
         <div class="form-foot">
           <button class="btn btn-primary" type="submit">Invia la richiesta</button>
