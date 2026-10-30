@@ -837,11 +837,21 @@
       });
     }
     chips.forEach(function (b) {
-      b.addEventListener("click", function () { picked = true; select(b.dataset.tex, true); });
+      b.addEventListener("click", function () {
+        picked = true;
+        // il nome e la descrizione si leggono ad alta voce solo quando la trama la sceglie chi visita,
+        // non a ogni cambio automatico
+        var info = nameEl && nameEl.parentNode;
+        if (info && !info.hasAttribute("aria-live")) info.setAttribute("aria-live", "polite");
+        select(b.dataset.tex, true);
+      });
     });
+    var lastSig = "";
     function start() {
       if (started) return;
       started = true;
+      var s0 = getComputedStyle(root);
+      lastSig = s0.getPropertyValue("--fil-lit") + s0.getPropertyValue("--stage") + stageSize().join("x") + (window.devicePixelRatio || 1);
       drawThumbs();
       select(cur, true);
     }
@@ -854,7 +864,14 @@
     }
     return {
       boot: function () { if (!("IntersectionObserver" in window)) start(); },
-      redraw: function () { cache = {}; if (!started) return; drawThumbs(); img = imageFor(cur); if (!raf) { draw(1, 0); setRead(1); } }
+      // ricalcola le trame solo se cambiano tema o larghezza: su telefono la barra dell'indirizzo
+      // che compare e sparisce manda "resize" di continuo, e ogni trama costa decine di millisecondi
+      redraw: function () {
+        if (!started) return;
+        var s = getComputedStyle(root), sig = s.getPropertyValue("--fil-lit") + s.getPropertyValue("--stage") + stageSize().join("x") + (window.devicePixelRatio || 1);
+        if (sig === lastSig) return;
+        lastSig = sig; cache = {}; drawThumbs(); img = imageFor(cur); if (!raf) { draw(1, 0); setRead(1); }
+      }
     };
   })();
 
@@ -943,7 +960,7 @@
   var IDEA_EX = {
     Statuetta: "Per esempio: una statuetta di mia nonna da una foto, alta circa 15 cm.",
     Quadro: "Per esempio: un quadro con il disegno di mio figlio, da appendere in cameretta.",
-    Vaso: "Per esempio: un vaso alto circa 25 cm, verde salvia, con la texture a onde.",
+    Vaso: "Per esempio: un vaso alto circa 25 cm, verde salvia, con la trama a diamanti.",
     Lampada: "Per esempio: una lampada da comodino con il paralume a costine e la luce calda.",
     Segnaposto: "Per esempio: 80 segnaposti con i nomi degli invitati, per un matrimonio.",
     Bomboniera: "Per esempio: 60 scatoline con le iniziali degli sposi e la data.",

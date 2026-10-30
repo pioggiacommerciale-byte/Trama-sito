@@ -390,7 +390,7 @@ h3 {
 }
 .tr-chip canvas { display: block; width: 100%; aspect-ratio: 4 / 3; border-radius: 8px; background: var(--stage); }
 .tr-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tr-chip:hover { border-color: var(--ink-3); color: var(--ink); transform: translateY(-2px); }
+@media (hover: hover) { .tr-chip:hover { border-color: var(--ink-3); color: var(--ink); transform: translateY(-2px); } }
 .tr-chip[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); color: var(--ink); }
 @media (max-width: 560px) { .tr-picker { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (prefers-reduced-motion: reduce) { .tr-chip { transition: none; } .tr-chip:hover { transform: none; } }

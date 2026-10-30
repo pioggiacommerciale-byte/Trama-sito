@@ -6,7 +6,7 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 - Branch: `settimana/2026-44`
 - Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (pronta, in attesa del titolare)
-- Stato: revisione finita (28/10, sera). Settimana chiusa: tocca al titolare approvare e unire.
+- Stato: revisione finita (30/10, mattina), comprese le aggiunte del 29/10. Settimana chiusa: tocca al titolare approvare e unire.
 - Fatto dal designer (28/10, sera):
   - **Texture di filamento** sullo sfondo: strati da 4 px che ondeggiano e invertono la fase ogni quattro, come la trama dei vasi (`assets/filo.svg`, usata come maschera). Colore dal token `--texture` (chiaro e scuro), sfuma verso il basso a sinistra, è fissa e non si anima. Il `body` ora è trasparente e le fasce `.alt` lasciano trasparire appena la texture.
   - **Vaso 3D in apertura**, in WebGL scritto a mano (circa 300 righe in `main.js`, nessuna libreria). Stessa forma e stessa texture "trama" del disegno 2D, 150 strati con solco e cresta. Si stampa strato per strato con lo strato in corso in bronzo, poi ruota piano, guarda verso il mouse e si gira trascinando col dito (scorrimento verticale della pagina invariato). "Ristampa" funziona ancora. Movimento ridotto: vaso intero e fermo. Senza WebGL (o se la scheda grafica si ferma) torna il disegno 2D di prima.
@@ -41,6 +41,13 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - **Le trame** nella sezione “Il dettaglio”: al posto delle onde animate, le sei trame di Trama G-code Studio (Intreccio, Diamanti, Voronoi, Organico, Squame, Pelliccia), calcolate con le stesse formule dello strumento (rumore, celle, onde copiati dal suo motore). Parete srotolata con proporzioni vere: raggio 40 mm, strati da 0,2 mm, 3 px per strato.
   - **Animazione nuova**: il riquadro stampa la trama scelta dal basso verso l'alto, con l'ugello che corre, la linea bronzo dello strato in corso e gli ultimi strati ancora caldi; sopra, in trasparenza, la trama che sta per nascere. Sei miniature per scegliere; se nessuno sceglie, le trame si alternano da sole (pausa 3,4 s). Movimento ridotto: trama intera e ferma, niente alternanza.
   - Calcolo di una trama a grandezza piena: 60-130 ms su computer; la successiva si prepara durante la pausa. Per il revisore: provare su un telefono vero il tempo al tocco di Voronoi e Organico (le più pesanti).
+- Revisione delle aggiunte del 29/10 (30/10, mattina, revisore): lette tutte le righe nuove (modulo, catalogo, testi, le trame). Testi di Quadri e Giochi generici, nessun dato inventato; marchio, token e contrasto a posto. Provato a 400 e 1280 px, chiaro e scuro, con e senza movimento ridotto: nessun errore in console, nessuno scorrimento orizzontale; scelta multipla del modulo usabile da tastiera (caselle vere dentro un gruppo con titolo), oggetto della mail corretto.
+  - Corretto: il nome e la descrizione della trama erano annunciati dal lettore di schermo a ogni cambio automatico (ogni 6 secondi circa); ora solo quando chi visita sceglie una trama.
+  - Corretto: le trame venivano ricalcolate a ogni "resize", che sui telefoni arriva di continuo con la barra dell'indirizzo; ora solo se cambiano tema o larghezza.
+  - Corretto: le miniature delle trame restavano sollevate dopo il tocco su telefono (effetto al passaggio ora solo con il mouse).
+  - Corretto: l'esempio "texture a onde" nel modulo (le onde non sono più nel sito) ora dice "trama a diamanti".
+  - Nota per il designer, non bloccante: le pillole scelte del modulo e la miniatura scelta usano il bronzo; il `BRIEF.md` lo riserva ad azioni principali e strato in stampa. Qui segna una scelta e si legge bene: lasciato così, da confermare.
+  - Ancora da fare a mano: tempo al tocco di Voronoi e Organico su un telefono vero.
 
 ## Lista migliorie
 
@@ -82,3 +89,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-28 · revisore · Terza verifica: ombra delle schede e del menu non più chiara nel tema scuro (nuovo token `--shadow`). PR #1 resta pronta.
 - 2026-10-29 · coordinatore · Richiesta del titolare: modulo con più tipi di oggetto (scelta multipla), catalogo vario (vaso, statuetta, lampada, bomboniera), testi del sito verso la varietà.
 - 2026-10-29 · coordinatore · Richiesta del titolare: sezione “Il dettaglio” con le sei trame di Trama G-code Studio e animazione di stampa strato per strato.
+- 2026-10-30 · revisore · Revisione delle aggiunte del 29/10 (modulo, catalogo, testi, trame): quattro dettagli corretti (annunci del lettore di schermo, ricalcolo su telefono, effetto al tocco, esempio del modulo). PR #1 resta pronta.
