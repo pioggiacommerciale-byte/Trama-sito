@@ -42,11 +42,22 @@ Trama è una piccola azienda di stampa 3D. Realizziamo oggetti su misura, pensat
 - Una modifica alla volta, su un branch, con una pull request che il titolare approva. Mai modifiche dirette su `main`.
 - **Non inventare dati**: prezzi, tempi di consegna, recensioni, clienti, indirizzi, numeri di telefono. Se servono e mancano, vanno chiesti al titolare e annotati qui sotto.
 
+## Foto dei lavori (sezione Catalogo)
+
+Ogni scheda del catalogo ha una cornice verticale 3:4 pronta per una foto vera. Finché la foto non c'è, resta il disegno con l'etichetta "disegno". Mai foto prese da altri, generate o di oggetti non stampati da Trama.
+
+- **Formato**: verticale 3:4, 1200 × 1600 px. Si può scattare col telefono e ritagliare.
+- **File**: WebP o JPEG, sotto i 250 KB, in `assets/lavori/`, nome semplice tipo `vaso-1.webp`.
+- **Scatto**: un oggetto per foto, intero e centrato, con un po' di margine attorno. Fondo neutro e liscio (grigio chiaro, carta, legno chiaro), luce naturale laterale che faccia vedere gli strati. Niente scritte né filigrane sopra.
+- **Didascalia**: nome dell'oggetto in grassetto, sotto una riga in mono con soli dati veri del pezzo fotografato: materiale, misure, trama (es. "PETG · 180 mm · trama Diamanti").
+- **Testo alternativo**: una frase su cosa si vede ("Vaso alto grigio con trama a diamanti, illuminato di lato").
+- Come inserirla: c'è un esempio pronto nel commento sopra il catalogo in `index.html`.
+
 ## Da confermare con il titolare
 
 - [ ] Email, WhatsApp e Instagram per i contatti (il modulo si attiva impostando `data-to` sul form in `index.html`)
 - [ ] Zona servita e spedizioni
 - [ ] Materiali offerti (nel sito ora: PLA, PETG, PETG con fibra di carbonio)
 - [ ] Prezzo comunicato insieme all'anteprima, prima della stampa
-- [ ] Foto dei lavori reali per la sezione Forme
+- [ ] Foto dei lavori reali per il Catalogo (formato e regole qui sopra, in "Foto dei lavori")
 - [ ] Dominio e hosting

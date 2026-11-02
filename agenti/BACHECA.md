@@ -4,6 +4,22 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 ## Settimana in corso
 
+- Branch: `settimana/2026-45`, aperto **sopra** `settimana/2026-44` perché la pull request #1 non è ancora unita (altrimenti avremmo rifatto da capo il lavoro della settimana scorsa).
+- Pull request: vedi registro (in bozza). Contiene anche i commit della #1: se il titolare unisce prima la #1, nella nuova restano solo le modifiche di questa settimana.
+- Stato: turno del designer fatto (02/11). Tocca allo sviluppatore.
+- Fatto dal designer (02/11): **spazio per le foto vere nel Catalogo**.
+  - Ogni scheda ha una cornice 3:4 (`.fc-media`) con fondo `--stage` e angoli arrotondati: ci sta un disegno o una foto, stessa misura, nessun salto al caricamento.
+  - Finché non c'è la foto vera, sui disegni c'è l'etichetta "disegno" (mono, piccola, in alto a sinistra); nel sottotitolo "quattro esempi di quello che stampiamo, per ora disegnati". Così nessuno scambia un disegno per un lavoro reale.
+  - L'inclinazione al passaggio del mouse ora va sulla cornice intera (le variabili `--tilt-x/--tilt-y` stanno sulla `figure`), così etichetta e disegno si muovono insieme. Vale anche per le foto (solo sollevamento, niente rotazione dell'oggetto).
+  - In `BRIEF.md` nuova sezione "Foto dei lavori": formato 1200 × 1600, peso, come scattare, didascalia con soli dati veri, testo alternativo. Esempio di codice pronto nel commento sopra il catalogo in `index.html`.
+  - Provato a 400 e 1280 px, chiaro e scuro, con e senza movimento ridotto: nessuno scorrimento orizzontale, nessun errore in console (a parte i caratteri di Google, non raggiungibili da qui). Provata anche una foto finta inserita solo nel test: stessa altezza dei disegni.
+- Lasciato allo sviluppatore:
+  - quando arriveranno le foto: `srcset` con una versione da 600 × 800 per i telefoni;
+  - controllare che con `loading="lazy"` la foto non sfarfalli durante la comparsa allo scorrimento;
+  - poi la sua miglioria dalla lista.
+
+## Settimana precedente (2026-44, pull request #1 in attesa del titolare)
+
 - Branch: `settimana/2026-44`
 - Pull request: [#1](https://github.com/pioggiacommerciale-byte/trama-sito/pull/1) (pronta, in attesa del titolare)
 - Stato: revisione finita (30/10, mattina), comprese le aggiunte del 29/10. Settimana chiusa: tocca al titolare approvare e unire.
@@ -62,13 +78,14 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - [x] [designer] **Priorità del titolare (28/10)**: animazioni mentre si scorre la pagina. Le sezioni devono comparire e sfumare con effetti di transizione curati; bottoni e link cliccabili con un effetto al passaggio del mouse (e al tocco su telefono). Obiettivo: un sito dall'aspetto professionale, non vistoso. Partire da ciò che esiste in `assets/styles.css` (sezione "movimento") e rispettare il movimento ridotto.
 - [x] [designer] Menu su telefono: sotto gli 860 px i link alle sezioni spariscono. Proporre un menu compatto. Fatto: bottone "Menu" con pannello (vedi "Settimana in corso").
 - [x] [sviluppatore] Favicon con la T di Trama e meta tag per la condivisione (Open Graph). Mancano `og:url` e `og:image`, in attesa del dominio.
-- [ ] [designer] Sezione Forme: preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto.
+- [x] [designer] Sezione Forme (ora Catalogo): preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto. Fatto il 02/11: cornice 3:4, etichetta "disegno", regole in `BRIEF.md`.
 - [x] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma. Fatto (JSON-LD in `index.html`); `url` si aggiunge col dominio.
 - [x] [revisore] Controllo completo di contrasto e testi del sito attuale. Fatto nella revisione del 28/10 sera: testi secondari tutti sopra 4,5:1, testi in italiano corretti.
 
 ## Domande per il titolare
 
 - Quali contatti mostrare: email, WhatsApp, Instagram? (vedi `BRIEF.md`)
+- Foto dei lavori veri per il Catalogo: ne avete già? Basta una per tipo (vaso, statuetta, lampada, bomboniera), verticale, con materiale e misure del pezzo. Regole in `BRIEF.md`, "Foto dei lavori".
 - Per l'anteprima quando il sito viene condiviso (WhatsApp, social): qual è il dominio del sito, e c'è una foto di un lavoro vero da usare come immagine?
 
 ## Registro

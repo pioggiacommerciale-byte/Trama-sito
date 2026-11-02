@@ -592,7 +592,7 @@
   if (reprint) reprint.addEventListener("click", startPrint);
 
   /* ---------- catalogo ---------- */
-  var cards = Array.prototype.slice.call(document.querySelectorAll(".form-card canvas"));
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".form-card .fc-media canvas"));
   var cardRot = new Map();
   function drawCard(c) { drawVase(c, c.dataset.style, { rot: cardRot.get(c) || 0 }); }
   cards.forEach(function (c) {
@@ -609,9 +609,11 @@
       if (reduceMq.matches) return;
       last = 0; raf = requestAnimationFrame(spin);
     });
+    // l'inclinazione va sulla scheda intera: cornice ed etichetta "disegno" si muovono insieme
+    var card = c.closest(".form-card") || c;
     c.addEventListener("pointerleave", function () {
       cancelAnimationFrame(raf); raf = 0;
-      c.style.removeProperty("--tilt-x"); c.style.removeProperty("--tilt-y");
+      card.style.removeProperty("--tilt-x"); card.style.removeProperty("--tilt-y");
     });
     // la scheda si inclina un poco verso il puntatore (al massimo 5 gradi; stile in styles.css)
     c.addEventListener("pointermove", function (e) {
@@ -619,8 +621,8 @@
       var r = c.getBoundingClientRect();
       var x = clamp((e.clientX - r.left) / r.width - 0.5, -0.5, 0.5);
       var y = clamp((e.clientY - r.top) / r.height - 0.5, -0.5, 0.5);
-      c.style.setProperty("--tilt-x", (x * 10).toFixed(2) + "deg");
-      c.style.setProperty("--tilt-y", (-y * 8).toFixed(2) + "deg");
+      card.style.setProperty("--tilt-x", (x * 10).toFixed(2) + "deg");
+      card.style.setProperty("--tilt-y", (-y * 8).toFixed(2) + "deg");
     });
   });
 

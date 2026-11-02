@@ -153,29 +153,50 @@
   </section>
 
   <!-- Catalogo: un esempio per tipo di oggetto, disegnati a strati come escono dalla stampante.
-       Quando ci sono le foto dei lavori veri, vanno al posto dei disegni (vedi BRIEF.md) -->
+       Ogni scheda ha una cornice 3:4 (.fc-media) pronta per la foto di un lavoro vero.
+       Per sostituire un disegno con una foto (regole complete in BRIEF.md, "Foto dei lavori"):
+         <figure class="form-card is-photo reveal">
+           <div class="fc-media">
+             <img src="assets/lavori/vaso-1.webp" width="1200" height="1600" loading="lazy" decoding="async"
+                  alt="Cosa si vede nella foto, in una frase">
+           </div>
+           <figcaption><b>Vaso</b><span class="mono">PETG · 180 mm · trama Diamanti</span></figcaption>
+         </figure>
+       Nella didascalia solo dati veri del pezzo fotografato: materiale, misure, trama. -->
   <section class="section" id="catalogo" aria-labelledby="h-catalogo">
     <div class="sec-in">
       <header class="sec-head reveal">
         <p class="eyebrow">Catalogo</p>
         <h2 class="title" id="h-catalogo">Un oggetto diverso per ogni richiesta.</h2>
-        <p class="sec-lede">Vasi, statuette, lampade, bomboniere: quattro esempi di quello che stampiamo. Ognuno lo progettiamo da capo, nelle misure e nei colori che scegli tu.</p>
+        <p class="sec-lede">Vasi, statuette, lampade, bomboniere: quattro esempi di quello che stampiamo, per ora disegnati. Ognuno lo progettiamo da capo, nelle misure e nei colori che scegli tu.</p>
       </header>
       <div class="forms">
-        <figure class="form-card reveal">
-          <canvas data-style="spirale" role="img" aria-label="Vaso con costole a spirale"></canvas>
+        <figure class="form-card is-drawing reveal">
+          <div class="fc-media">
+            <canvas data-style="spirale" role="img" aria-label="Vaso con costole a spirale"></canvas>
+            <span class="fc-tag mono" aria-hidden="true">disegno</span>
+          </div>
           <figcaption><b>Vaso</b><span class="mono">spirale · 12 costole</span></figcaption>
         </figure>
-        <figure class="form-card reveal">
-          <canvas data-style="statuetta" role="img" aria-label="Statuetta stilizzata di una figura su un basamento tondo"></canvas>
+        <figure class="form-card is-drawing reveal">
+          <div class="fc-media">
+            <canvas data-style="statuetta" role="img" aria-label="Statuetta stilizzata di una figura su un basamento tondo"></canvas>
+            <span class="fc-tag mono" aria-hidden="true">disegno</span>
+          </div>
           <figcaption><b>Statuetta</b><span class="mono">da una foto · figura intera</span></figcaption>
         </figure>
-        <figure class="form-card reveal">
-          <canvas data-style="lampada" role="img" aria-label="Lampada da tavolo accesa, con paralume a costine"></canvas>
+        <figure class="form-card is-drawing reveal">
+          <div class="fc-media">
+            <canvas data-style="lampada" role="img" aria-label="Lampada da tavolo accesa, con paralume a costine"></canvas>
+            <span class="fc-tag mono" aria-hidden="true">disegno</span>
+          </div>
           <figcaption><b>Lampada</b><span class="mono">paralume a costine · luce calda</span></figcaption>
         </figure>
-        <figure class="form-card reveal">
-          <canvas data-style="bomboniera" role="img" aria-label="Bomboniera: scatolina tonda con coperchio e pomello"></canvas>
+        <figure class="form-card is-drawing reveal">
+          <div class="fc-media">
+            <canvas data-style="bomboniera" role="img" aria-label="Bomboniera: scatolina tonda con coperchio e pomello"></canvas>
+            <span class="fc-tag mono" aria-hidden="true">disegno</span>
+          </div>
           <figcaption><b>Bomboniera</b><span class="mono">scatolina con coperchio</span></figcaption>
         </figure>
       </div>
