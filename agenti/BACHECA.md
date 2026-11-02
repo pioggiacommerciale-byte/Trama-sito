@@ -5,7 +5,7 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 ## Settimana in corso
 
 - Branch: `settimana/2026-45`, aperto **sopra** `settimana/2026-44` perché la pull request #1 non è ancora unita (altrimenti avremmo rifatto da capo il lavoro della settimana scorsa).
-- Pull request: vedi registro (in bozza). Contiene anche i commit della #1: se il titolare unisce prima la #1, nella nuova restano solo le modifiche di questa settimana.
+- Pull request: [#2](https://github.com/pioggiacommerciale-byte/trama-sito/pull/2) (in bozza). Contiene anche i commit della #1: se il titolare unisce prima la #1, nella nuova restano solo le modifiche di questa settimana.
 - Stato: turno del designer fatto (02/11). Tocca allo sviluppatore.
 - Fatto dal designer (02/11): **spazio per le foto vere nel Catalogo**.
   - Ogni scheda ha una cornice 3:4 (`.fc-media`) con fondo `--stage` e angoli arrotondati: ci sta un disegno o una foto, stessa misura, nessun salto al caricamento.
@@ -107,3 +107,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-29 · coordinatore · Richiesta del titolare: modulo con più tipi di oggetto (scelta multipla), catalogo vario (vaso, statuetta, lampada, bomboniera), testi del sito verso la varietà.
 - 2026-10-29 · coordinatore · Richiesta del titolare: sezione “Il dettaglio” con le sei trame di Trama G-code Studio e animazione di stampa strato per strato.
 - 2026-10-30 · revisore · Revisione delle aggiunte del 29/10 (modulo, catalogo, testi, trame): quattro dettagli corretti (annunci del lettore di schermo, ricalcolo su telefono, effetto al tocco, esempio del modulo). PR #1 resta pronta.
+- 2026-11-02 · designer · Catalogo pronto per le foto vere (cornice 3:4, etichetta "disegno", regole in BRIEF.md). Branch settimana/2026-45 aperto sopra la 2026-44 (PR #1 non ancora unita), PR #2 in bozza.
