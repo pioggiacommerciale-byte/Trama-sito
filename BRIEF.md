@@ -47,7 +47,7 @@ Trama è una piccola azienda di stampa 3D. Realizziamo oggetti su misura, pensat
 Ogni scheda del catalogo ha una cornice verticale 3:4 pronta per una foto vera. Finché la foto non c'è, resta il disegno con l'etichetta "disegno". Mai foto prese da altri, generate o di oggetti non stampati da Trama.
 
 - **Formato**: verticale 3:4, 1200 × 1600 px. Si può scattare col telefono e ritagliare.
-- **File**: WebP o JPEG, sotto i 250 KB, in `assets/lavori/`, nome semplice tipo `vaso-1.webp`.
+- **File**: WebP o JPEG, sotto i 250 KB, in `assets/lavori/`, nome semplice tipo `vaso-1.webp`. Della stessa foto serve anche una copia piccola da 600 × 800 px per i telefoni, con `-600` nel nome (`vaso-1-600.webp`, sotto gli 80 KB).
 - **Scatto**: un oggetto per foto, intero e centrato, con un po' di margine attorno. Fondo neutro e liscio (grigio chiaro, carta, legno chiaro), luce naturale laterale che faccia vedere gli strati. Niente scritte né filigrane sopra.
 - **Didascalia**: nome dell'oggetto in grassetto, sotto una riga in mono con soli dati veri del pezzo fotografato: materiale, misure, trama (es. "PETG · 180 mm · trama Diamanti").
 - **Testo alternativo**: una frase su cosa si vede ("Vaso alto grigio con trama a diamanti, illuminato di lato").

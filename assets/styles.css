@@ -359,6 +359,12 @@ h3 {
 }
 .fc-media canvas { cursor: grab; }
 .fc-media img { object-fit: cover; object-position: center; }
+/* foto in caricamento: resta il fondo della cornice, poi la foto sfuma quando è pronta (classe da main.js).
+   Senza JavaScript la foto si vede normalmente; con il movimento ridotto compare senza sfumare. */
+[data-photos] .fc-media img:not(.is-loaded) { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-photos] .fc-media img { transition: opacity 0.45s var(--ease-out); }
+}
 /* etichetta onesta: finché non c'è la foto vera, la scheda dice che è un disegno */
 .fc-tag {
   position: absolute; left: 10px; top: 10px; padding: 3px 8px; border-radius: 999px;

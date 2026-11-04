@@ -6,7 +6,7 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 - Branch: `settimana/2026-45`, aperto **sopra** `settimana/2026-44` perché la pull request #1 non è ancora unita (altrimenti avremmo rifatto da capo il lavoro della settimana scorsa).
 - Pull request: [#2](https://github.com/pioggiacommerciale-byte/trama-sito/pull/2) (in bozza). Contiene anche i commit della #1: se il titolare unisce prima la #1, nella nuova restano solo le modifiche di questa settimana.
-- Stato: turno del designer fatto (02/11). Tocca allo sviluppatore.
+- Stato: turno del designer fatto (02/11), turno dello sviluppatore fatto (04/11). Tocca al revisore.
 - Fatto dal designer (02/11): **spazio per le foto vere nel Catalogo**.
   - Ogni scheda ha una cornice 3:4 (`.fc-media`) con fondo `--stage` e angoli arrotondati: ci sta un disegno o una foto, stessa misura, nessun salto al caricamento.
   - Finché non c'è la foto vera, sui disegni c'è l'etichetta "disegno" (mono, piccola, in alto a sinistra); nel sottotitolo "quattro esempi di quello che stampiamo, per ora disegnati". Così nessuno scambia un disegno per un lavoro reale.
@@ -17,6 +17,12 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - quando arriveranno le foto: `srcset` con una versione da 600 × 800 per i telefoni;
   - controllare che con `loading="lazy"` la foto non sfarfalli durante la comparsa allo scorrimento;
   - poi la sua miglioria dalla lista.
+- Fatto dallo sviluppatore (04/11):
+  - **Foto pronte per i telefoni**: nell'esempio sopra il catalogo (`index.html`) ora ci sono `srcset` (600 e 1200 px di larghezza) e `sizes` (metà schermo meno il margine sotto i 980 px, 280 px su schermo largo). Su un telefono a 400 px e su computer il browser scarica la versione da 600 × 800, su tablet quella grande. In `BRIEF.md`, "Foto dei lavori": serve anche la copia `-600` (600 × 800, sotto gli 80 KB).
+  - **Niente sfarfallio con `loading="lazy"`**: se la foto arriva mentre la scheda sta già comparendo, la cornice resta col suo fondo e la foto sfuma solo quando è caricata (classe `is-loaded` da `main.js`, attiva solo se nella pagina c'è almeno una foto). In caso di errore la foto si mostra comunque, così resta il testo alternativo. Senza JavaScript la foto si vede normalmente; con il movimento ridotto compare senza sfumare.
+  - Provato con una foto finta inserita solo nel test, anche con caricamento rallentato di 2,5 s: a 400 px (densità 2) e 1280 px, chiaro e scuro, con e senza movimento ridotto. Nessuno scorrimento orizzontale, nessun errore in console (a parte i caratteri di Google, bloccati da qui), foto alta quanto i disegni.
+  - Nessuna miglioria `[sviluppatore]` aperta nella lista: non ne ho presa un'altra.
+- Lasciato al revisore: rileggere le righe nuove (esempio nel commento, regola CSS `[data-photos]`, blocco foto in `main.js`, riga in `BRIEF.md`).
 
 ## Settimana precedente (2026-44, pull request #1 in attesa del titolare)
 
@@ -108,3 +114,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-29 · coordinatore · Richiesta del titolare: sezione “Il dettaglio” con le sei trame di Trama G-code Studio e animazione di stampa strato per strato.
 - 2026-10-30 · revisore · Revisione delle aggiunte del 29/10 (modulo, catalogo, testi, trame): quattro dettagli corretti (annunci del lettore di schermo, ricalcolo su telefono, effetto al tocco, esempio del modulo). PR #1 resta pronta.
 - 2026-11-02 · designer · Catalogo pronto per le foto vere (cornice 3:4, etichetta "disegno", regole in BRIEF.md). Branch settimana/2026-45 aperto sopra la 2026-44 (PR #1 non ancora unita), PR #2 in bozza.
+- 2026-11-04 · sviluppatore · Foto del catalogo pronte per i telefoni (srcset 600/1200, sizes) e senza sfarfallio al caricamento differito (sfumano quando sono pronte). PR #2 in bozza, tocca al revisore.

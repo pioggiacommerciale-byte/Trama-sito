@@ -592,6 +592,21 @@
   if (reprint) reprint.addEventListener("click", startPrint);
 
   /* ---------- catalogo ---------- */
+  /* foto vere (quando ci saranno): con loading="lazy" possono arrivare mentre la scheda sta già comparendo.
+     Finché non sono pronte resta il fondo della cornice, poi sfumano: niente foto che spuntano a metà. */
+  (function () {
+    var photos = document.querySelectorAll(".fc-media img");
+    if (!photos.length) return;
+    root.setAttribute("data-photos", "");
+    Array.prototype.forEach.call(photos, function (img) {
+      function show() { img.classList.add("is-loaded"); }
+      // anche in caso di errore si mostra, così resta visibile il testo alternativo
+      if (img.complete) { show(); return; }
+      img.addEventListener("load", show, { once: true });
+      img.addEventListener("error", show, { once: true });
+    });
+  })();
+
   var cards = Array.prototype.slice.call(document.querySelectorAll(".form-card .fc-media canvas"));
   var cardRot = new Map();
   function drawCard(c) { drawVase(c, c.dataset.style, { rot: cardRot.get(c) || 0 }); }

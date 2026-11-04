@@ -157,11 +157,16 @@
        Per sostituire un disegno con una foto (regole complete in BRIEF.md, "Foto dei lavori"):
          <figure class="form-card is-photo reveal">
            <div class="fc-media">
-             <img src="assets/lavori/vaso-1.webp" width="1200" height="1600" loading="lazy" decoding="async"
+             <img src="assets/lavori/vaso-1.webp"
+                  srcset="assets/lavori/vaso-1-600.webp 600w, assets/lavori/vaso-1.webp 1200w"
+                  sizes="(max-width: 980px) calc(50vw - 23px), 280px"
+                  width="1200" height="1600" loading="lazy" decoding="async"
                   alt="Cosa si vede nella foto, in una frase">
            </div>
            <figcaption><b>Vaso</b><span class="mono">PETG · 180 mm · trama Diamanti</span></figcaption>
          </figure>
+       Servono due file della stessa foto: vaso-1.webp (1200 × 1600) e vaso-1-600.webp (600 × 800, per i telefoni).
+       Il browser sceglie da solo quello giusto (srcset e sizes); la foto compare sfumando solo quando è caricata.
        Nella didascalia solo dati veri del pezzo fotografato: materiale, misure, trama. -->
   <section class="section" id="catalogo" aria-labelledby="h-catalogo">
     <div class="sec-in">
