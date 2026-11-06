@@ -5,8 +5,8 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 ## Settimana in corso
 
 - Branch: `settimana/2026-45`, aperto **sopra** `settimana/2026-44` perché la pull request #1 non è ancora unita (altrimenti avremmo rifatto da capo il lavoro della settimana scorsa).
-- Pull request: [#2](https://github.com/pioggiacommerciale-byte/trama-sito/pull/2) (in bozza). Contiene anche i commit della #1: se il titolare unisce prima la #1, nella nuova restano solo le modifiche di questa settimana.
-- Stato: turno del designer fatto (02/11), turno dello sviluppatore fatto (04/11). Tocca al revisore.
+- Pull request: [#2](https://github.com/pioggiacommerciale-byte/trama-sito/pull/2) (pronta, in attesa del titolare). Contiene anche i commit della #1: se il titolare unisce prima la #1, nella nuova restano solo le modifiche di questa settimana.
+- Stato: designer (02/11), sviluppatore (04/11) e revisore (06/11) fatti. Settimana chiusa, pull request #2 pronta: tocca al titolare.
 - Fatto dal designer (02/11): **spazio per le foto vere nel Catalogo**.
   - Ogni scheda ha una cornice 3:4 (`.fc-media`) con fondo `--stage` e angoli arrotondati: ci sta un disegno o una foto, stessa misura, nessun salto al caricamento.
   - Finché non c'è la foto vera, sui disegni c'è l'etichetta "disegno" (mono, piccola, in alto a sinistra); nel sottotitolo "quattro esempi di quello che stampiamo, per ora disegnati". Così nessuno scambia un disegno per un lavoro reale.
@@ -23,6 +23,9 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - Provato con una foto finta inserita solo nel test, anche con caricamento rallentato di 2,5 s: a 400 px (densità 2) e 1280 px, chiaro e scuro, con e senza movimento ridotto. Nessuno scorrimento orizzontale, nessun errore in console (a parte i caratteri di Google, bloccati da qui), foto alta quanto i disegni.
   - Nessuna miglioria `[sviluppatore]` aperta nella lista: non ne ho presa un'altra.
 - Lasciato al revisore: rileggere le righe nuove (esempio nel commento, regola CSS `[data-photos]`, blocco foto in `main.js`, riga in `BRIEF.md`).
+- Esito della revisione (06/11, revisore): lette tutte le righe cambiate rispetto a `settimana/2026-44` (il resto era già rivisto nella #1, nessun commit nuovo lì). Testi e regole per le foto chiari, nessun dato inventato (la didascalia "PETG · 180 mm · trama Diamanti" è solo nell'esempio del commento), token, contrasto e sicurezza a posto. Provato a 400 e 1280 px, chiaro e scuro, con e senza movimento ridotto: nessuno scorrimento orizzontale, nessun errore in console (a parte i caratteri di Google, bloccati da qui). Provata una foto finta solo nel test, con caricamento rallentato: a 400 px (densità 2) e a 1280 px scarica la `-600`, a 800 px (densità 2) quella grande; foto alta quanto i disegni, compare solo a caricamento finito.
+  - Corretto: l'etichetta "disegno" prendeva dimensione e colore delle didascalie (12,5 px, `--ink-3`) invece dei suoi 11 px in `--ink-2`, perché la regola `.form-card .mono` vinceva. Ora quella regola vale solo dentro la didascalia (`.form-card figcaption .mono`).
+  - Ancora da fare a mano (dalla #1): tempo al tocco di Voronoi e Organico e 3D su un telefono vero.
 
 ## Settimana precedente (2026-44, pull request #1 in attesa del titolare)
 
@@ -115,3 +118,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-10-30 · revisore · Revisione delle aggiunte del 29/10 (modulo, catalogo, testi, trame): quattro dettagli corretti (annunci del lettore di schermo, ricalcolo su telefono, effetto al tocco, esempio del modulo). PR #1 resta pronta.
 - 2026-11-02 · designer · Catalogo pronto per le foto vere (cornice 3:4, etichetta "disegno", regole in BRIEF.md). Branch settimana/2026-45 aperto sopra la 2026-44 (PR #1 non ancora unita), PR #2 in bozza.
 - 2026-11-04 · sviluppatore · Foto del catalogo pronte per i telefoni (srcset 600/1200, sizes) e senza sfarfallio al caricamento differito (sfumano quando sono pronte). PR #2 in bozza, tocca al revisore.
+- 2026-11-06 · revisore · Revisione della settimana 2026-45: un dettaglio corretto (misura e colore dell'etichetta "disegno"), nessun problema grande, pull request #2 segnata pronta.
