@@ -4,6 +4,21 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 ## Settimana in corso
 
+- Branch: `settimana/2026-46`, aperto **sopra** `settimana/2026-45` perché le pull request #1 e #2 non sono ancora unite.
+- Pull request: [#3](https://github.com/pioggiacommerciale-byte/trama-sito/pull/3) (bozza). Contiene anche i commit di #1 e #2: se il titolare le unisce prima, qui restano solo le modifiche di questa settimana.
+- Stato: designer fatto (09/11). Tocca allo sviluppatore.
+- Fatto dal designer (09/11): nessuna voce `[designer]` aperta nella lista, quindi ne ho proposta una, **il menu segna la sezione in cui ti trovi**. La pagina è lunga e su telefono il menu è chiuso: ora si capisce dove sei.
+  - Mentre scorri, il link della sezione sullo schermo (Cosa realizziamo, Come funziona, Catalogo, Domande) resta sottolineato e a colore pieno; nel pannello del telefono ha una tacca corta a sinistra. Nelle parti senza link (apertura, fascia, Il dettaglio, contatti) nessun link è segnato.
+  - Niente bronzo: è un'indicazione, non un'azione (`BRIEF.md`). Colore `--ink`, quindi giusto in chiaro e scuro.
+  - Per il lettore di schermo il link ha `aria-current="location"`. Conta la sezione che attraversa una linea a un terzo dello schermo (`IntersectionObserver`, nessun calcolo durante lo scorrimento). Non anima nulla, quindi vale uguale col movimento ridotto. Senza JavaScript il menu resta com'era.
+  - Provato a 400 e 1280 px, chiaro e scuro, con e senza movimento ridotto, passando per tutte le sezioni: link giusto in ognuna, nessuno scorrimento orizzontale, nessun errore in console (a parte i caratteri di Google, bloccati da qui).
+- Lasciato allo sviluppatore:
+  - controllare la soglia "un terzo dello schermo" su un telefono vero con la barra dell'indirizzo che compare e sparisce;
+  - se ti sembra utile, aggiungere al menu anche "Il dettaglio" (`#firma`): ora è l'unica sezione grande senza link. Non l'ho fatto per non allungare il pannello su telefono senza sentire il titolare;
+  - poi una miglioria `[sviluppatore]`, se ne compare una nella lista.
+
+## Settimana precedente (2026-45, pull request #2 in attesa del titolare)
+
 - Branch: `settimana/2026-45`, aperto **sopra** `settimana/2026-44` perché la pull request #1 non è ancora unita (altrimenti avremmo rifatto da capo il lavoro della settimana scorsa).
 - Pull request: [#2](https://github.com/pioggiacommerciale-byte/trama-sito/pull/2) (pronta, in attesa del titolare). Contiene anche i commit della #1: se il titolare unisce prima la #1, nella nuova restano solo le modifiche di questa settimana.
 - Stato: designer (02/11), sviluppatore (04/11) e revisore (06/11) fatti. Settimana chiusa, pull request #2 pronta: tocca al titolare.
@@ -89,6 +104,7 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - [x] [sviluppatore] Favicon con la T di Trama e meta tag per la condivisione (Open Graph). Mancano `og:url` e `og:image`, in attesa del dominio.
 - [x] [designer] Sezione Forme (ora Catalogo): preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto. Fatto il 02/11: cornice 3:4, etichetta "disegno", regole in `BRIEF.md`.
 - [x] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma. Fatto (JSON-LD in `index.html`); `url` si aggiunge col dominio.
+- [x] [designer] Menu che segna la sezione in cui ti trovi (proposta del designer, 09/11): link sottolineato mentre scorri, tacca nel pannello del telefono, `aria-current`. Fatto (vedi "Settimana in corso").
 - [x] [revisore] Controllo completo di contrasto e testi del sito attuale. Fatto nella revisione del 28/10 sera: testi secondari tutti sopra 4,5:1, testi in italiano corretti.
 
 ## Domande per il titolare
@@ -119,3 +135,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-11-02 · designer · Catalogo pronto per le foto vere (cornice 3:4, etichetta "disegno", regole in BRIEF.md). Branch settimana/2026-45 aperto sopra la 2026-44 (PR #1 non ancora unita), PR #2 in bozza.
 - 2026-11-04 · sviluppatore · Foto del catalogo pronte per i telefoni (srcset 600/1200, sizes) e senza sfarfallio al caricamento differito (sfumano quando sono pronte). PR #2 in bozza, tocca al revisore.
 - 2026-11-06 · revisore · Revisione della settimana 2026-45: un dettaglio corretto (misura e colore dell'etichetta "disegno"), nessun problema grande, pull request #2 segnata pronta.
+- 2026-11-09 · designer · Nessuna voce [designer] aperta: proposto e fatto il menu che segna la sezione in cui ti trovi. Branch settimana/2026-46 aperto sopra la 2026-45 (#1 e #2 non ancora unite), PR #3 in bozza.
