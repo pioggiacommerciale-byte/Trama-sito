@@ -576,6 +576,14 @@ h3 {
   transition: transform 0.3s var(--ease-out);
 }
 .nav a:hover::after, .nav a:focus-visible::after { transform: scaleX(1); }
+/* sezione in cui ti trovi (aria-current da main.js): testo pieno e linea ferma sotto.
+   Niente bronzo: è un'indicazione, non un'azione. */
+.nav a[aria-current] { color: var(--ink); }
+.nav a[aria-current]::after { transform: scaleX(1); }
+@media (max-width: 860px) {
+  /* nel pannello del telefono la linea non c'è: una tacca corta a sinistra del link */
+  [data-menu] .nav a[aria-current] { box-shadow: inset 3px 0 0 var(--ink); padding-left: 14px; }
+}
 
 /* link di testo (Ristampa) */
 .link { transition: text-decoration-color var(--t-fast) ease, color var(--t-fast) ease; }

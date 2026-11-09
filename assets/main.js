@@ -970,6 +970,32 @@
     if (wideMq.addEventListener) wideMq.addEventListener("change", function (e) { if (e.matches) set(false); });
   })();
 
+  /* ---------- sezione in cui ti trovi ----------
+     Mentre scorri, il link del menu della sezione sullo schermo resta sottolineato (aria-current="location").
+     Conta la sezione che attraversa una linea a un terzo dell'altezza dello schermo; nelle parti senza link
+     (apertura, fascia, Il dettaglio, contatti) nessun link è segnato. Non anima nulla: vale anche col movimento ridotto. */
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('#menu a[href^="#"]'));
+    if (!links.length || !("IntersectionObserver" in window)) return;
+    var byId = {}, on = {};
+    links.forEach(function (a) {
+      var sec = document.getElementById(a.getAttribute("href").slice(1));
+      if (sec) byId[sec.id] = a;
+    });
+    function paint() {
+      var cur = null;
+      Object.keys(on).forEach(function (id) { if (on[id]) cur = id; });
+      links.forEach(function (a) {
+        if (byId[cur] === a) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current");
+      });
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { on[e.target.id] = e.isIntersecting; });
+      paint();
+    }, { rootMargin: "-33% 0px -66% 0px", threshold: 0 });
+    Object.keys(byId).forEach(function (id) { io.observe(document.getElementById(id)); });
+  })();
+
   /* ---------- modulo contatti ---------- */
   var form = document.getElementById("contactForm");
   var status = document.getElementById("formStatus");
