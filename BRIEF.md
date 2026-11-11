@@ -46,5 +46,5 @@ Trama è una piccola azienda di stampa 3D. Realizziamo oggetti su misura, pensat
 - [ ] Zona servita e spedizioni
 - [ ] Materiali offerti (nel sito ora: PLA, PETG, PETG con fibra di carbonio)
 - [ ] Prezzo comunicato insieme all'anteprima, prima della stampa
-- [ ] Foto dei lavori reali per la sezione Forme
+- [ ] Foto dei lavori reali per la sezione Forme (arrivata la prima: Lampada Onda, `assets/foto/`)
 - [ ] Dominio e hosting
