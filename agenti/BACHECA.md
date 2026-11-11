@@ -6,7 +6,7 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 - Branch: `settimana/2026-46`, aperto **sopra** `settimana/2026-45` perché le pull request #1 e #2 non sono ancora unite.
 - Pull request: [#3](https://github.com/pioggiacommerciale-byte/trama-sito/pull/3) (bozza). Contiene anche i commit di #1 e #2: se il titolare le unisce prima, qui restano solo le modifiche di questa settimana.
-- Stato: designer fatto (09/11). Tocca allo sviluppatore.
+- Stato: designer (09/11) e sviluppatore (11/11) fatti. Tocca al revisore.
 - Fatto dal designer (09/11): nessuna voce `[designer]` aperta nella lista, quindi ne ho proposta una, **il menu segna la sezione in cui ti trovi**. La pagina è lunga e su telefono il menu è chiuso: ora si capisce dove sei.
   - Mentre scorri, il link della sezione sullo schermo (Cosa realizziamo, Come funziona, Catalogo, Domande) resta sottolineato e a colore pieno; nel pannello del telefono ha una tacca corta a sinistra. Nelle parti senza link (apertura, fascia, Il dettaglio, contatti) nessun link è segnato.
   - Niente bronzo: è un'indicazione, non un'azione (`BRIEF.md`). Colore `--ink`, quindi giusto in chiaro e scuro.
@@ -16,6 +16,12 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - controllare la soglia "un terzo dello schermo" su un telefono vero con la barra dell'indirizzo che compare e sparisce;
   - se ti sembra utile, aggiungere al menu anche "Il dettaglio" (`#firma`): ora è l'unica sezione grande senza link. Non l'ho fatto per non allungare il pannello su telefono senza sentire il titolare;
   - poi una miglioria `[sviluppatore]`, se ne compare una nella lista.
+- Fatto dallo sviluppatore (11/11):
+  - **Soglia "un terzo dello schermo" con la barra dell'indirizzo**: nessuna modifica necessaria. Simulata la barra che compare e sparisce (altezza della finestra che passa da 640 a 720 px e torna, a 400 px di larghezza) in 76 punti della pagina: in tutti e 228 i controlli il link segnato è quello della sezione che attraversa la linea a un terzo. `IntersectionObserver` ricalcola da solo quando cambia l'altezza, e la linea si sposta al massimo di una ventina di pixel: nessuno sfarfallio. Provati anche i tocchi sui link del menu: dopo il salto la sezione scelta è sempre quella segnata, anche Domande, che è corta e vicina al fondo. Da provare comunque su un telefono vero.
+  - **"Il dettaglio" nel menu** (`#firma`), tra Catalogo e Domande, con lo stesso nome dell'occhiello della sezione come gli altri link. È la sezione delle trame, la nostra firma (`BRIEF.md`, punto 3), ed era l'unica grande senza link. Il pannello del telefono passa da quattro a cinque voci: arriva a 347 px dall'alto, quindi sta anche su uno schermo da 640 px. Su computer ci sta in una riga anche a 861 px (restano oltre 100 px di margine accanto al logo); senza JavaScript la riga di link scorre di lato come prima. Se il titolare preferisce il menu a quattro voci basta togliere la riga in `index.html`.
+  - Provato a 400, 861 e 1280 px, chiaro e scuro, con e senza movimento ridotto, e senza JavaScript: scorrendo si segnano in ordine Cosa realizziamo, Come funziona, Catalogo, Il dettaglio, Domande; nessuno scorrimento orizzontale, nessun errore in console (servito in locale; i caratteri di Google sono bloccati da qui).
+  - Nessuna miglioria `[sviluppatore]` aperta nella lista: non ne ho presa un'altra.
+- Lasciato al revisore: rileggere la riga nuova del menu in `index.html` e il commento aggiornato in `main.js`; provare il menu su un telefono vero (soglia con la barra dell'indirizzo, pannello a cinque voci).
 
 ## Settimana precedente (2026-45, pull request #2 in attesa del titolare)
 
@@ -104,7 +110,7 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - [x] [sviluppatore] Favicon con la T di Trama e meta tag per la condivisione (Open Graph). Mancano `og:url` e `og:image`, in attesa del dominio.
 - [x] [designer] Sezione Forme (ora Catalogo): preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto. Fatto il 02/11: cornice 3:4, etichetta "disegno", regole in `BRIEF.md`.
 - [x] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma. Fatto (JSON-LD in `index.html`); `url` si aggiunge col dominio.
-- [x] [designer] Menu che segna la sezione in cui ti trovi (proposta del designer, 09/11): link sottolineato mentre scorri, tacca nel pannello del telefono, `aria-current`. Fatto (vedi "Settimana in corso").
+- [x] [designer] Menu che segna la sezione in cui ti trovi (proposta del designer, 09/11): link sottolineato mentre scorri, tacca nel pannello del telefono, `aria-current`. Fatto (vedi "Settimana in corso"); l'11/11 lo sviluppatore ha aggiunto al menu "Il dettaglio".
 - [x] [revisore] Controllo completo di contrasto e testi del sito attuale. Fatto nella revisione del 28/10 sera: testi secondari tutti sopra 4,5:1, testi in italiano corretti.
 
 ## Domande per il titolare
@@ -136,3 +142,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-11-04 · sviluppatore · Foto del catalogo pronte per i telefoni (srcset 600/1200, sizes) e senza sfarfallio al caricamento differito (sfumano quando sono pronte). PR #2 in bozza, tocca al revisore.
 - 2026-11-06 · revisore · Revisione della settimana 2026-45: un dettaglio corretto (misura e colore dell'etichetta "disegno"), nessun problema grande, pull request #2 segnata pronta.
 - 2026-11-09 · designer · Nessuna voce [designer] aperta: proposto e fatto il menu che segna la sezione in cui ti trovi. Branch settimana/2026-46 aperto sopra la 2026-45 (#1 e #2 non ancora unite), PR #3 in bozza.
+- 2026-11-11 · sviluppatore · Soglia del menu provata con la barra dell'indirizzo simulata (nessuna modifica necessaria), aggiunto "Il dettaglio" al menu. PR #3 in bozza, tocca al revisore.

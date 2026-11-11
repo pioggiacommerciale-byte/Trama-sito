@@ -973,7 +973,7 @@
   /* ---------- sezione in cui ti trovi ----------
      Mentre scorri, il link del menu della sezione sullo schermo resta sottolineato (aria-current="location").
      Conta la sezione che attraversa una linea a un terzo dell'altezza dello schermo; nelle parti senza link
-     (apertura, fascia, Il dettaglio, contatti) nessun link è segnato. Non anima nulla: vale anche col movimento ridotto. */
+     (apertura, fascia, contatti) nessun link è segnato. Non anima nulla: vale anche col movimento ridotto. */
   (function () {
     var links = Array.prototype.slice.call(document.querySelectorAll('#menu a[href^="#"]'));
     if (!links.length || !("IntersectionObserver" in window)) return;
