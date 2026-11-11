@@ -22,7 +22,9 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 ## Domande per il titolare
 
 - Quali contatti mostrare: email, WhatsApp, Instagram? (vedi `BRIEF.md`)
+- Lampada Onda (foto in `assets/foto/`): materiale, misure e strati, da aggiungere alla didascalia.
 
 ## Registro
 
 - 2026-10-28 · setup · Prima versione del sito e ruoli del team (designer, sviluppatore, revisore).
+- 2026-11-11 · titolare · Prima foto reale (Lampada Onda) nella sezione Forme, in WebP 800/1400 px con JPG di riserva.
