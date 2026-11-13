@@ -5,8 +5,9 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 ## Settimana in corso
 
 - Branch: `settimana/2026-46`, aperto **sopra** `settimana/2026-45` perché le pull request #1 e #2 non sono ancora unite.
-- Pull request: [#3](https://github.com/pioggiacommerciale-byte/trama-sito/pull/3) (bozza). Contiene anche i commit di #1 e #2: se il titolare le unisce prima, qui restano solo le modifiche di questa settimana.
-- Stato: designer (09/11) e sviluppatore (11/11) fatti. Tocca al revisore.
+- Pull request: [#3](https://github.com/pioggiacommerciale-byte/trama-sito/pull/3) (pronta, in attesa del titolare). Contiene anche i commit di #1 e #2: se il titolare le unisce prima, qui restano solo le modifiche di questa settimana.
+- Stato: designer (09/11), sviluppatore (11/11) e revisore (13/11) fatti. Settimana chiusa, pull request #3 pronta: tocca al titolare.
+- Pull request #3 segnata **pronta** il 13/11.
 - Fatto dal designer (09/11): nessuna voce `[designer]` aperta nella lista, quindi ne ho proposta una, **il menu segna la sezione in cui ti trovi**. La pagina è lunga e su telefono il menu è chiuso: ora si capisce dove sei.
   - Mentre scorri, il link della sezione sullo schermo (Cosa realizziamo, Come funziona, Catalogo, Domande) resta sottolineato e a colore pieno; nel pannello del telefono ha una tacca corta a sinistra. Nelle parti senza link (apertura, fascia, Il dettaglio, contatti) nessun link è segnato.
   - Niente bronzo: è un'indicazione, non un'azione (`BRIEF.md`). Colore `--ink`, quindi giusto in chiaro e scuro.
@@ -22,6 +23,9 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - Provato a 400, 861 e 1280 px, chiaro e scuro, con e senza movimento ridotto, e senza JavaScript: scorrendo si segnano in ordine Cosa realizziamo, Come funziona, Catalogo, Il dettaglio, Domande; nessuno scorrimento orizzontale, nessun errore in console (servito in locale; i caratteri di Google sono bloccati da qui).
   - Nessuna miglioria `[sviluppatore]` aperta nella lista: non ne ho presa un'altra.
 - Lasciato al revisore: rileggere la riga nuova del menu in `index.html` e il commento aggiornato in `main.js`; provare il menu su un telefono vero (soglia con la barra dell'indirizzo, pannello a cinque voci).
+- Esito della revisione (13/11, revisore): lette tutte le righe cambiate rispetto a `settimana/2026-45` (il resto era già rivisto in #1 e #2, nessun commit nuovo su quei branch); controllo veloce dell'intero confronto con `main` per indirizzi esterni e chiavi: solo i caratteri di Google, nessun segreto. Riga nuova del menu e commento in `main.js` corretti; colori da token (`--ink`), niente bronzo, `aria-current` giusto. Provato a 400, 861 e 1280 px, chiaro e scuro, con e senza movimento ridotto: scorrendo si segnano in ordine Cosa realizziamo, Come funziona, Catalogo, Il dettaglio, Domande, e nessun link nell'apertura e nei contatti; menu su una riga a 861 px; pannello del telefono a cinque voci con la tacca; nessuno scorrimento orizzontale, nessun errore in console (caratteri di Google bloccati da qui).
+  - Nessuna correzione al sito. Corretta solo la descrizione della pull request, che diceva ancora "Il dettaglio" senza link.
+  - Ancora da fare a mano: provare il menu su un telefono vero (soglia con la barra dell'indirizzo); dalla #1, tempo al tocco di Voronoi e Organico e 3D su telefono vero.
 
 ## Settimana precedente (2026-45, pull request #2 in attesa del titolare)
 
@@ -143,3 +147,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-11-06 · revisore · Revisione della settimana 2026-45: un dettaglio corretto (misura e colore dell'etichetta "disegno"), nessun problema grande, pull request #2 segnata pronta.
 - 2026-11-09 · designer · Nessuna voce [designer] aperta: proposto e fatto il menu che segna la sezione in cui ti trovi. Branch settimana/2026-46 aperto sopra la 2026-45 (#1 e #2 non ancora unite), PR #3 in bozza.
 - 2026-11-11 · sviluppatore · Soglia del menu provata con la barra dell'indirizzo simulata (nessuna modifica necessaria), aggiunto "Il dettaglio" al menu. PR #3 in bozza, tocca al revisore.
+- 2026-11-13 · revisore · Revisione della settimana 2026-46: tutto a posto, nessuna correzione al sito (aggiornata la descrizione della PR), pull request #3 segnata pronta.
