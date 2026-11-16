@@ -289,11 +289,13 @@
       <form class="form reveal" id="contactForm" data-to="" novalidate>
         <div class="field">
           <label for="f-nome">Nome</label>
-          <input id="f-nome" name="nome" type="text" autocomplete="name" required>
+          <input id="f-nome" name="nome" type="text" autocomplete="name" required aria-describedby="e-nome">
+          <p class="field-err" id="e-nome" hidden></p>
         </div>
         <div class="field">
           <label for="f-email">Email</label>
-          <input id="f-email" name="email" type="email" autocomplete="email" required>
+          <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email">
+          <p class="field-err" id="e-email" hidden></p>
         </div>
         <fieldset class="choice">
           <legend>Cosa vorresti realizzare <span class="opt">anche più di uno</span></legend>
@@ -310,7 +312,8 @@
         </fieldset>
         <div class="field">
           <label for="f-idea">La tua idea</label>
-          <textarea id="f-idea" name="idea" rows="5" required placeholder="Per esempio: una statuetta da una foto, alta circa 15 cm, oppure 60 bomboniere con le iniziali degli sposi."></textarea>
+          <textarea id="f-idea" name="idea" rows="5" required placeholder="Per esempio: una statuetta da una foto, alta circa 15 cm, oppure 60 bomboniere con le iniziali degli sposi." aria-describedby="e-idea"></textarea>
+          <p class="field-err" id="e-idea" hidden></p>
         </div>
         <div class="form-foot">
           <button class="btn btn-primary" type="submit">Invia la richiesta</button>

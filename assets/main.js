@@ -1021,16 +1021,44 @@
       idea.setAttribute("placeholder", on && IDEA_EX[on.value] ? IDEA_EX[on.value] : ideaDefault);
     });
   }
+  /* errori campo per campo: una frase sotto il campo, non solo il bordo rosso.
+     La frase è legata al campo (aria-describedby), così il lettore di schermo la legge entrando nel campo.
+     Compare solo dopo il primo invio; poi si aggiorna mentre scrivi e sparisce appena il campo va bene. */
+  var FIELD_ERR = {
+    nome: { vuoto: "Scrivi il tuo nome, anche solo quello." },
+    email: { vuoto: "Scrivi la tua email: ti rispondiamo lì.", formato: "Controlla l'email: deve essere come nome@esempio.it." },
+    idea: { vuoto: "Raccontaci l'idea, bastano due righe." }
+  };
+  function checkField(el) {
+    var valid = el.checkValidity();
+    var msg = document.getElementById("e-" + el.name);
+    el.setAttribute("aria-invalid", valid ? "false" : "true");
+    if (msg) {
+      var t = FIELD_ERR[el.name] || {};
+      msg.textContent = valid ? "" : (el.validity.valueMissing ? t.vuoto : (t.formato || t.vuoto)) || "Controlla questo campo.";
+      msg.hidden = valid;
+    }
+    return valid;
+  }
   if (form) {
+    form.addEventListener("input", function (e) {
+      var el = e.target;
+      if (el && el.required && el.hasAttribute("aria-invalid")) checkField(el);
+    });
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var ok = true;
+      var wrong = [];
       Array.prototype.forEach.call(form.querySelectorAll("[required]"), function (el) {
-        var valid = el.checkValidity();
-        el.setAttribute("aria-invalid", valid ? "false" : "true");
-        if (!valid && ok) { el.focus(); ok = false; }
+        if (!checkField(el)) wrong.push(el);
       });
-      if (!ok) { status.textContent = "Completa i campi evidenziati: nome, email e idea."; return; }
+      if (wrong.length) {
+        wrong[0].focus();
+        status.textContent = wrong.length === 1
+          ? "Manca ancora una cosa: la trovi segnata qui sopra."
+          : "Mancano ancora " + (wrong.length === 2 ? "due" : "tre") + " cose: le trovi segnate qui sopra.";
+        return;
+      }
+      status.textContent = "";
       var to = (form.dataset.to || "").trim();
       if (!to) {
         status.textContent = "Il modulo non è ancora collegato a un indirizzo email: per ora scrivici sui nostri canali.";
