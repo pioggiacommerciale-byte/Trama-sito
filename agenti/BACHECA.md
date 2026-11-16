@@ -4,6 +4,22 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 ## Settimana in corso
 
+- Branch: `settimana/2026-47`, aperto **sopra** `settimana/2026-46` perché le pull request #1, #2 e #3 non sono ancora unite.
+- Pull request: [#5](https://github.com/pioggiacommerciale-byte/trama-sito/pull/5) (bozza). Contiene anche i commit di #1, #2 e #3: se il titolare le unisce prima, qui resta solo il modulo.
+- Stato: designer fatto (16/11). Tocca allo sviluppatore.
+- Fatto dal designer (16/11): nessuna voce `[designer]` aperta nella lista, quindi ne ho proposta una, **il modulo spiega gli errori campo per campo**. Prima un campo sbagliato si riconosceva solo dal bordo rosso (solo colore, non basta per WCAG) e da un messaggio generico in fondo.
+  - Sotto ogni campo obbligatorio un `<p class="field-err">` con una frase breve e un segno "!" a sinistra: nome vuoto, email vuota, email scritta male (frase diversa), idea vuota. Testi in `FIELD_ERR` in `main.js`.
+  - Compare solo al primo invio; poi si aggiorna mentre scrivi (evento `input`) e sparisce quando il campo va bene. Il cursore va sul primo campo sbagliato; accanto al bottone "Mancano ancora due cose: le trovi segnate qui sopra."
+  - Legata al campo con `aria-describedby`. Colore `--crit` (contrasto 5,4–6,1:1 in chiaro e scuro), bordo rosso un poco più marcato con un'ombra interna (nessun salto di impaginazione). Movimento ridotto: compare ferma; altrimenti sfuma in 0,25 s.
+  - Provato a 400 e 1280 px, chiaro e scuro, con e senza movimento ridotto: frasi giuste, focus sul primo campo, nessuno scorrimento orizzontale, nessun errore in console (caratteri di Google bloccati da qui).
+- Lasciato allo sviluppatore:
+  - provare il modulo con un lettore di schermo (VoiceOver o TalkBack, se possibile simularlo): la frase deve essere letta entrando nel campo, e il messaggio accanto al bottone annunciato una volta sola;
+  - su iPhone controllare che il bordo con l'ombra interna non si sommi male allo stile del focus;
+  - poi una miglioria `[sviluppatore]`, se ne compare una nella lista.
+- Nota: c'è anche la pull request [#4](https://github.com/pioggiacommerciale-byte/trama-sito/pull/4) (11/11), aperta da un'altra sessione partendo da `main`, con la **prima foto vera** (Lampada Onda, foto orizzontale sotto il catalogo). Non l'ho toccata. Quando il titolare decide, la foto andrà portata nella cornice 3:4 del Catalogo (vedi `BRIEF.md`, "Foto dei lavori"): serve una versione verticale e i dati veri del pezzo.
+
+## Settimana precedente (2026-46, pull request #3 in attesa del titolare)
+
 - Branch: `settimana/2026-46`, aperto **sopra** `settimana/2026-45` perché le pull request #1 e #2 non sono ancora unite.
 - Pull request: [#3](https://github.com/pioggiacommerciale-byte/trama-sito/pull/3) (pronta, in attesa del titolare). Contiene anche i commit di #1 e #2: se il titolare le unisce prima, qui restano solo le modifiche di questa settimana.
 - Stato: designer (09/11), sviluppatore (11/11) e revisore (13/11) fatti. Settimana chiusa, pull request #3 pronta: tocca al titolare.
@@ -115,12 +131,14 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - [x] [designer] Sezione Forme (ora Catalogo): preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto. Fatto il 02/11: cornice 3:4, etichetta "disegno", regole in `BRIEF.md`.
 - [x] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma. Fatto (JSON-LD in `index.html`); `url` si aggiunge col dominio.
 - [x] [designer] Menu che segna la sezione in cui ti trovi (proposta del designer, 09/11): link sottolineato mentre scorri, tacca nel pannello del telefono, `aria-current`. Fatto (vedi "Settimana in corso"); l'11/11 lo sviluppatore ha aggiunto al menu "Il dettaglio".
+- [ ] [designer] Modulo con errori spiegati campo per campo (proposta del designer, 16/11): frase sotto il campo, segno "!", `aria-describedby`, aggiornamento mentre scrivi. Fatto dal designer, manca la prova dello sviluppatore con il lettore di schermo (vedi "Settimana in corso").
 - [x] [revisore] Controllo completo di contrasto e testi del sito attuale. Fatto nella revisione del 28/10 sera: testi secondari tutti sopra 4,5:1, testi in italiano corretti.
 
 ## Domande per il titolare
 
 - Quali contatti mostrare: email, WhatsApp, Instagram? (vedi `BRIEF.md`)
 - Foto dei lavori veri per il Catalogo: ne avete già? Basta una per tipo (vaso, statuetta, lampada, bomboniera), verticale, con materiale e misure del pezzo. Regole in `BRIEF.md`, "Foto dei lavori".
+- Lampada Onda (pull request #4): materiale, misure e strati del pezzo, per la didascalia. E se possibile una foto verticale (1200 × 1600) per la cornice del Catalogo.
 - Per l'anteprima quando il sito viene condiviso (WhatsApp, social): qual è il dominio del sito, e c'è una foto di un lavoro vero da usare come immagine?
 
 ## Registro
@@ -148,3 +166,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-11-09 · designer · Nessuna voce [designer] aperta: proposto e fatto il menu che segna la sezione in cui ti trovi. Branch settimana/2026-46 aperto sopra la 2026-45 (#1 e #2 non ancora unite), PR #3 in bozza.
 - 2026-11-11 · sviluppatore · Soglia del menu provata con la barra dell'indirizzo simulata (nessuna modifica necessaria), aggiunto "Il dettaglio" al menu. PR #3 in bozza, tocca al revisore.
 - 2026-11-13 · revisore · Revisione della settimana 2026-46: tutto a posto, nessuna correzione al sito (aggiornata la descrizione della PR), pull request #3 segnata pronta.
+- 2026-11-16 · designer · Nessuna voce [designer] aperta: proposto e fatto il modulo con errori spiegati campo per campo. Branch settimana/2026-47 aperto sopra la 2026-46 (#1, #2 e #3 non ancora unite), PR #5 in bozza.
