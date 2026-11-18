@@ -6,7 +6,7 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 - Branch: `settimana/2026-47`, aperto **sopra** `settimana/2026-46` perché le pull request #1, #2 e #3 non sono ancora unite.
 - Pull request: [#5](https://github.com/pioggiacommerciale-byte/trama-sito/pull/5) (bozza). Contiene anche i commit di #1, #2 e #3: se il titolare le unisce prima, qui resta solo il modulo.
-- Stato: designer fatto (16/11). Tocca allo sviluppatore.
+- Stato: designer (16/11) e sviluppatore (18/11) fatti. Tocca al revisore.
 - Fatto dal designer (16/11): nessuna voce `[designer]` aperta nella lista, quindi ne ho proposta una, **il modulo spiega gli errori campo per campo**. Prima un campo sbagliato si riconosceva solo dal bordo rosso (solo colore, non basta per WCAG) e da un messaggio generico in fondo.
   - Sotto ogni campo obbligatorio un `<p class="field-err">` con una frase breve e un segno "!" a sinistra: nome vuoto, email vuota, email scritta male (frase diversa), idea vuota. Testi in `FIELD_ERR` in `main.js`.
   - Compare solo al primo invio; poi si aggiorna mentre scrivi (evento `input`) e sparisce quando il campo va bene. Il cursore va sul primo campo sbagliato; accanto al bottone "Mancano ancora due cose: le trovi segnate qui sopra."
@@ -16,6 +16,13 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - provare il modulo con un lettore di schermo (VoiceOver o TalkBack, se possibile simularlo): la frase deve essere letta entrando nel campo, e il messaggio accanto al bottone annunciato una volta sola;
   - su iPhone controllare che il bordo con l'ombra interna non si sommi male allo stile del focus;
   - poi una miglioria `[sviluppatore]`, se ne compare una nella lista.
+- Fatto dallo sviluppatore (18/11):
+  - **Lettore di schermo** (simulato leggendo l'albero di accessibilità di Chrome, niente VoiceOver vero da qui): entrando nel campo si sente nome, "non valido" e la frase giusta. Però la frase cominciava con "punto esclamativo", perché il segno "!" del CSS veniva letto. Ora il segno si vede ma non si legge (`content: "!" / ""`; i browser vecchi lo leggono ancora, nessun danno).
+  - **Messaggio accanto al bottone**: ora si scrive 150 ms dopo aver portato il cursore sul campo sbagliato, così VoiceOver legge prima il campo e poi la frase, senza che una copra l'altra. Una sola scrittura per invio (controllato registrando ogni cambio della regione "status"). Prima restava "Mancano ancora tre cose" anche dopo averle sistemate: ora il conto si aggiorna quando esci da un campo (mai mentre scrivi, per non far parlare il lettore a ogni tasto) e la frase sparisce appena è tutto a posto.
+  - **iPhone**: da qui non c'è Safari vero. Il bordo rosso con l'ombra interna sta dentro il campo e il contorno del focus (bronzo) fuori, a 1 px: non si sovrappongono. Per sicurezza tolto lo stile di sistema dei campi (`appearance: none` su `input` e `textarea` del modulo), che su iPhone aggiunge un'ombra interna sua in alto e si sarebbe sommata a quella dell'errore.
+  - Provato a 400 e 1280 px, chiaro e scuro, con e senza movimento ridotto: frasi giuste, cursore sul primo campo sbagliato, nessuno scorrimento orizzontale, nessun errore in console (caratteri di Google bloccati da qui).
+  - Nessuna miglioria `[sviluppatore]` aperta nella lista: non ne ho presa un'altra.
+- Lasciato al revisore: rileggere `sayMissing` e `countWrong` in `main.js` e le due righe nuove in `styles.css`; se possibile provare il modulo con VoiceOver su un iPhone vero (frase del campo, messaggio annunciato una volta, focus con bordo rosso).
 - Nota: c'è anche la pull request [#4](https://github.com/pioggiacommerciale-byte/trama-sito/pull/4) (11/11), aperta da un'altra sessione partendo da `main`, con la **prima foto vera** (Lampada Onda, foto orizzontale sotto il catalogo). Non l'ho toccata. Quando il titolare decide, la foto andrà portata nella cornice 3:4 del Catalogo (vedi `BRIEF.md`, "Foto dei lavori"): serve una versione verticale e i dati veri del pezzo.
 
 ## Settimana precedente (2026-46, pull request #3 in attesa del titolare)
@@ -131,7 +138,7 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - [x] [designer] Sezione Forme (ora Catalogo): preparare lo spazio per le foto vere (formato, didascalie), senza inventare foto. Fatto il 02/11: cornice 3:4, etichetta "disegno", regole in `BRIEF.md`.
 - [x] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma. Fatto (JSON-LD in `index.html`); `url` si aggiunge col dominio.
 - [x] [designer] Menu che segna la sezione in cui ti trovi (proposta del designer, 09/11): link sottolineato mentre scorri, tacca nel pannello del telefono, `aria-current`. Fatto (vedi "Settimana in corso"); l'11/11 lo sviluppatore ha aggiunto al menu "Il dettaglio".
-- [ ] [designer] Modulo con errori spiegati campo per campo (proposta del designer, 16/11): frase sotto il campo, segno "!", `aria-describedby`, aggiornamento mentre scrivi. Fatto dal designer, manca la prova dello sviluppatore con il lettore di schermo (vedi "Settimana in corso").
+- [x] [designer] Modulo con errori spiegati campo per campo (proposta del designer, 16/11): frase sotto il campo, segno "!", `aria-describedby`, aggiornamento mentre scrivi. Fatto dal designer; il 18/11 lo sviluppatore l'ha provato col lettore di schermo simulato e rifinito (vedi "Settimana in corso"). Manca la revisione.
 - [x] [revisore] Controllo completo di contrasto e testi del sito attuale. Fatto nella revisione del 28/10 sera: testi secondari tutti sopra 4,5:1, testi in italiano corretti.
 
 ## Domande per il titolare
@@ -167,3 +174,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-11-11 · sviluppatore · Soglia del menu provata con la barra dell'indirizzo simulata (nessuna modifica necessaria), aggiunto "Il dettaglio" al menu. PR #3 in bozza, tocca al revisore.
 - 2026-11-13 · revisore · Revisione della settimana 2026-46: tutto a posto, nessuna correzione al sito (aggiornata la descrizione della PR), pull request #3 segnata pronta.
 - 2026-11-16 · designer · Nessuna voce [designer] aperta: proposto e fatto il modulo con errori spiegati campo per campo. Branch settimana/2026-47 aperto sopra la 2026-46 (#1, #2 e #3 non ancora unite), PR #5 in bozza.
+- 2026-11-18 · sviluppatore · Modulo provato col lettore di schermo simulato: il segno "!" non si legge più, messaggio accanto al bottone annunciato una volta e aggiornato, campi senza stile di sistema su iPhone. PR #5 in bozza, tocca al revisore.

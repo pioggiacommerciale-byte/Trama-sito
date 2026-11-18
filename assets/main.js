@@ -1040,10 +1040,33 @@
     }
     return valid;
   }
+  /* frase accanto al bottone: quante cose mancano. È una regione "status", quindi il lettore di schermo la annuncia da sola.
+     Si scrive un attimo dopo aver spostato il cursore sul campo sbagliato: così VoiceOver legge prima il campo
+     e poi la frase, senza che una copra l'altra. Si aggiorna quando esci da un campo, mai mentre scrivi. */
+  var NUM = ["", "una", "due", "tre"];
+  var statusTimer = 0, statusErr = false;
+  function sayMissing(n, later) {
+    clearTimeout(statusTimer);
+    var txt = !n ? "" : n === 1
+      ? "Manca ancora una cosa: la trovi segnata qui sopra."
+      : "Mancano ancora " + NUM[n] + " cose: le trovi segnate qui sopra.";
+    statusErr = n > 0;
+    if (!later) { if (status.textContent !== txt) status.textContent = txt; return; }
+    status.textContent = "";
+    statusTimer = setTimeout(function () { status.textContent = txt; }, 150);
+  }
+  function countWrong() {
+    return form.querySelectorAll('[required][aria-invalid="true"]').length;
+  }
   if (form) {
     form.addEventListener("input", function (e) {
       var el = e.target;
       if (el && el.required && el.hasAttribute("aria-invalid")) checkField(el);
+      // tutto a posto: la frase sparisce subito (togliere il testo non fa parlare il lettore di schermo)
+      if (statusErr && !countWrong()) sayMissing(0);
+    });
+    form.addEventListener("focusout", function () {
+      if (statusErr) sayMissing(countWrong());
     });
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -1053,12 +1076,10 @@
       });
       if (wrong.length) {
         wrong[0].focus();
-        status.textContent = wrong.length === 1
-          ? "Manca ancora una cosa: la trovi segnata qui sopra."
-          : "Mancano ancora " + (wrong.length === 2 ? "due" : "tre") + " cose: le trovi segnate qui sopra.";
+        sayMissing(wrong.length, true);
         return;
       }
-      status.textContent = "";
+      sayMissing(0);
       var to = (form.dataset.to || "").trim();
       if (!to) {
         status.textContent = "Il modulo non è ancora collegato a un indirizzo email: per ora scrivici sui nostri canali.";
