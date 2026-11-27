@@ -4,9 +4,14 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
 
 ## Settimana in corso
 
+_(nessuna: la prossima la apre il designer)_
+
+## Settimana precedente (2026-48, pull request #6 in attesa del titolare)
+
 - Branch: `settimana/2026-48`, aperto **sopra** `settimana/2026-47` perché le pull request #1, #2, #3 e #5 non sono ancora unite.
-- Pull request: [#6](https://github.com/pioggiacommerciale-byte/trama-sito/pull/6) (bozza). Contiene anche i commit di #1, #2, #3 e #5: se il titolare le unisce prima, qui resta solo la modifica delle Domande.
-- Stato: designer (23/11) e sviluppatore (25/11) fatti. Tocca al revisore.
+- Pull request: [#6](https://github.com/pioggiacommerciale-byte/trama-sito/pull/6) (pronta, in attesa del titolare). Contiene anche i commit di #1, #2, #3 e #5: se il titolare le unisce prima, qui resta solo la modifica delle Domande.
+- Stato: designer (23/11), sviluppatore (25/11) e revisore (27/11) fatti. Settimana chiusa, pull request #6 pronta: tocca al titolare.
+- Pull request #6 segnata **pronta** il 27/11.
 - Fatto dal designer (23/11): nessuna voce `[designer]` aperta nella lista, quindi ne ho proposta una, **le risposte delle Domande si aprono scorrendo**. Prima la risposta compariva di colpo e il resto della pagina saltava: era l'unico punto senza movimento morbido.
   - Solo CSS, in `styles.css` sezione "movimento": `::details-content` passa da altezza 0 ad `auto` (con `interpolate-size: allow-keywords` su `.faq`) in 0,32 s, con una sfumatura; la frase sale di 4 px. Anche la chiusura è animata.
   - Dentro `@supports selector(::details-content)` e dentro `prefers-reduced-motion: no-preference`: su Safari e Firefox che non lo supportano, e con il movimento ridotto, si apre subito come prima.
@@ -22,6 +27,9 @@ Qui designer, sviluppatore e revisore si passano il lavoro. Ognuno la legge all'
   - Nota: vicino al fondo dello schermo la risposta si apre in parte sotto il bordo e va scorsa a mano. È il comportamento normale di `<details>`; non ho aggiunto uno scorrimento automatico per non muovere la pagina senza che lo chieda chi visita.
   - Nessuna miglioria `[sviluppatore]` aperta nella lista: non ne ho presa un'altra.
 - Lasciato al revisore: rileggere la regola del 23/11 in `styles.css` (nessun cambio da allora); se possibile provare su un iPhone vero che, senza animazione, le Domande si aprano subito come prima.
+- Esito della revisione (27/11, revisore): lette tutte le righe cambiate rispetto a `settimana/2026-47` (il resto era già rivisto in #1, #2, #3 e #5, nessun commit nuovo su quei branch); controllo veloce dell'intero confronto con `main` per indirizzi esterni e chiavi: solo i caratteri di Google, nessun segreto. Regola corretta: dentro `prefers-reduced-motion: no-preference` e `@supports selector(::details-content)`, nessun colore nuovo, nessun testo cambiato. Provato a 400 e 1280 px, chiaro e scuro, con e senza movimento ridotto: la risposta cresce in più passaggi (69 → 143 → 170 px a 400 px) e si richiude scorrendo; col movimento ridotto si apre e chiude subito. Nessuno scorrimento orizzontale, nessun errore in console (caratteri di Google bloccati da qui).
+  - Unica correzione: in `styles.css` il commento "la risposta sale di pochi pixel" era finito in fondo alla riga sbagliata; ora sta sopra la regola che descrive.
+  - Ancora da fare a mano: provare le Domande su un iPhone vero (senza animazione devono aprirsi subito); dalle settimane prima, modulo con VoiceOver, menu su telefono vero e tempo al tocco di Voronoi e Organico.
 
 ## Settimana precedente (2026-47, pull request #5 in attesa del titolare)
 
@@ -164,7 +172,7 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - [x] [sviluppatore] Dati strutturati di base per Google: solo nome e descrizione, niente indirizzi o telefoni finché il titolare non li conferma. Fatto (JSON-LD in `index.html`); `url` si aggiunge col dominio.
 - [x] [designer] Menu che segna la sezione in cui ti trovi (proposta del designer, 09/11): link sottolineato mentre scorri, tacca nel pannello del telefono, `aria-current`. Fatto (vedi "Settimana in corso"); l'11/11 lo sviluppatore ha aggiunto al menu "Il dettaglio".
 - [x] [designer] Modulo con errori spiegati campo per campo (proposta del designer, 16/11): frase sotto il campo, segno "!", `aria-describedby`, aggiornamento mentre scrivi. Fatto dal designer; il 18/11 lo sviluppatore l'ha provato col lettore di schermo simulato e rifinito (vedi "Settimana in corso"). Rivisto il 20/11.
-- [x] [designer] Domande che si aprono scorrendo (proposta del designer, 23/11): apertura e chiusura morbide della risposta, solo CSS, ferme col movimento ridotto. Fatto dal designer; il 25/11 lo sviluppatore ha provato ricerca nella pagina e telefono, nessuna modifica (vedi "Settimana in corso").
+- [x] [designer] Domande che si aprono scorrendo (proposta del designer, 23/11): apertura e chiusura morbide della risposta, solo CSS, ferme col movimento ridotto. Fatto dal designer; il 25/11 lo sviluppatore ha provato ricerca nella pagina e telefono, nessuna modifica. Rivisto il 27/11.
 - [x] [revisore] Controllo completo di contrasto e testi del sito attuale. Fatto nella revisione del 28/10 sera: testi secondari tutti sopra 4,5:1, testi in italiano corretti.
 
 ## Domande per il titolare
@@ -204,3 +212,4 @@ Una riga per miglioria, la prima in alto è la più importante. Tra parentesi qu
 - 2026-11-20 · revisore · Revisione della settimana 2026-47: tutto a posto, nessuna correzione al sito, pull request #5 segnata pronta.
 - 2026-11-23 · designer · Nessuna voce [designer] aperta: proposto e fatto l'apertura morbida delle risposte nelle Domande. Branch settimana/2026-48 aperto sopra la 2026-47 (#1, #2, #3 e #5 non ancora unite), PR #6 in bozza.
 - 2026-11-25 · sviluppatore · Domande provate con la ricerca nella pagina (le risposte chiuse si aprono da sole) e su telefono simulato (la pagina non salta): nessuna modifica al sito. PR #6 in bozza, tocca al revisore.
+- 2026-11-27 · revisore · Revisione della settimana 2026-48: tutto a posto, corretto solo un commento fuori posto in styles.css, pull request #6 segnata pronta.
